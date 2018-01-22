@@ -1,16 +1,50 @@
 <ion-header>
   <ion-navbar>
-    <img ion-right src="assets/imgs/bananalogo.png" class="navbarLogo" />
-    <ion-title>Contact</ion-title>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+     <img ion-right src="assets/imgs/bananalogo.png" class="navbarLogo" />
+    <ion-title>Contact Us</ion-title>
   </ion-navbar>
 </ion-header>
 
+
 <ion-content>
-  <ion-list>
-    <ion-list-header>Follow us on Twitter</ion-list-header>
-    <ion-item>
-      <ion-icon name="ionic" item-left></ion-icon>
-      @ionicframework
+<ion-card class="card-wizard">
+  <ion-card-content>
+    <ion-card-title>
+      Get In Touch
+    </ion-card-title>
+    <p>Please leave a message.</p>
+      <ion-item>
+         <ion-label floating>Your name</ion-label>
+        <ion-input type="text" ></ion-input>
+     </ion-item>
+
+     <ion-item>
+       <ion-label floating>Your email address</ion-label>
+        <ion-input type="text" ></ion-input>
+      </ion-item>
+
+      <ion-item>
+      <ion-label floating>Message</ion-label>
+      <ion-textarea></ion-textarea>
     </ion-item>
+
+    <button ion-button block color="secondary" (click)="toggle()">Send</button>
+
+    <ion-list>
+      <ion-item>
+        <ion-icon name="umbrella" item-left></ion-icon>
+        Follow us on twitter
+      </ion-item>
+
+      <ion-item>
+        <ion-icon name="ionic" item-left></ion-icon>
+        Follow us on facebook
+      </ion-item>
   </ion-list>
-</ion-content>
+
+  </ion-card-content>
+</ion-card>
+<ion-content>

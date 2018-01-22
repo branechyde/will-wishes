@@ -1,0 +1,39 @@
+page-inventory {
+    .block {
+      position: relative;
+    }
+
+  ion-card {
+    position: relative;
+    text-align: center;
+  }
+
+  ion-wizard-step {
+    width: 100%;
+  }
+
+
+}
+
+.deleteIcon {
+  margin-right: 5px;
+}
+
+.btn {
+  position: absolute;
+  right: 10px;
+  top: 5px;
+  background:red;
+  text-transform: capitalize;
+  text-decoration: none!important;
+  padding: 5px;
+  font-size: 10px;
+  color: #fff;
+  border-radius: 4px;
+  z-index: 9;
+}
+
+.no-padding {
+  padding: 3px !important;
+}
+

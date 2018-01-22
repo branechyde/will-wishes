@@ -14,3 +14,39 @@
 // To declare rules for a specific mode, create a child rule
 // for the .md, .ios, or .wp mode classes. The mode class is
 // automatically applied to the <body> element in the app.
+
+
+
+#sidebar {
+    background: color($colors, energy);
+    
+    button.item {
+    background: none!important;
+    border-bottom: solid 1px #eee!important;
+    }
+
+    button.item:hover{
+    background: #666!important;
+    color: #fff;
+    }
+
+    button.item:hover ion-icon {
+    color: color($colors, primary);
+    }
+
+    ion-icon {
+    border-radius: 50%;
+    background: #fff;
+    padding: 5px;
+    height: 40px;
+    width: 40px;
+    }
+  }
+
+
+
+.center {
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+}

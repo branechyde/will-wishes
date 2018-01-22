@@ -1,0 +1,139 @@
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Create Inventory</ion-title>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content>
+  <ion-simple-wizard [(step)]="step" [showSteps]="false" (finish)="onFinish()" [finishIcon]="'done-all'" [(stepCondition)]="stepCondition">
+    <ion-wizard-step>
+  
+        <ion-card-content>
+          <ion-card-title text-center><ion-icon  name="arrow-dropright-circle" color="primary"></ion-icon>&nbsp;Step 1 </ion-card-title>
+          <p text-center>Simply complete the following fields and press the next button.</p>
+          <ion-list>
+
+            <ion-item>
+               <ion-label floating>Title</ion-label>
+              <ion-input type="text" name="title" [(ngModel)]="data.title"></ion-input>
+           </ion-item>
+
+            <ion-item>
+            <ion-label floating>Description</ion-label>
+            <ion-textarea name="description" [(ngModel)]="data.description"></ion-textarea>
+          </ion-item>
+
+           <ion-item>
+             <ion-label floating>Address</ion-label>
+              <ion-input type="text" name="address" [(ngModel)]="data.address"></ion-input>
+            </ion-item>
+             <ion-input type="hidden" name="uid" [(ngModel)]="data.uid" value="{{uid}}"></ion-input>
+          </ion-list>
+      </ion-card-content>
+  
+  </ion-wizard-step>
+
+    <ion-wizard-step>
+        <ion-card-content>
+          <ion-card-title text-center><ion-icon  name="arrow-dropright-circle" color="primary"></ion-icon>&nbsp;Step 2</ion-card-title>
+          <p text-center>Enter current market value of Asset.</p>
+           <ion-list>
+
+              <ion-item>
+                <ion-label stacked color="primary">City</ion-label>
+                <ion-input  type="text" placeholder="Your city" name="city" [(ngModel)]="data.city"></ion-input>
+              </ion-item>
+
+              <ion-item>
+                <ion-label stacked color="primary">Postcode</ion-label>
+                <ion-input  type="text" placeholder="i.e. SW1 4AD" name="postcode" [(ngModel)]="data.postcode"></ion-input>
+              </ion-item>
+
+                <ion-item>
+                <ion-label stacked color="primary">Asset value</ion-label>
+                <ion-input  type="text" placeholder="Estimated Value" name="worth" [(ngModel)]="data.worth"></ion-input>
+              </ion-item>
+
+              <ion-item>
+                <ion-label stacked color="primary">Bequeathed To</ion-label>
+                <ion-input  type="text" placeholder="Who is this to be left to" name="other" [(ngModel)]="data.other"></ion-input>
+              </ion-item>
+          
+          </ion-list>
+        </ion-card-content>
+    </ion-wizard-step>
+
+
+    <ion-wizard-step>
+        <ion-card-content>
+          <ion-card-title text-center><ion-icon  name="arrow-dropright-circle" color="primary"></ion-icon>&nbsp;Step 3</ion-card-title>
+          <p text-center>Take up to 4 Photos of your Asset</p>
+          <!-- Take Photo -->
+            <button ion-button block outline color="secondary" (click)="chooseMedia()">
+            <ion-icon name="camera"></ion-icon>&nbsp;Take Photo
+            </button>
+
+            <ion-grid no-padding>
+              <ion-row>
+                <ion-col col-6 *ngFor="let photo of photos; let id = index" class="no-padding">
+                    <a href="#" class="btn" (click)="deletePhoto(id)"><ion-icon name="trash" class="deleteIcon"></ion-icon>Delete</a>
+                    <img [src]="photo" *ngIf="photo" />
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+
+    
+          <!--
+          <ion-item>
+            <h4>Image Preview</h4>
+          </ion-item>
+  
+           <ion-grid no-padding>
+              <ion-row>
+                <ion-col col-6 *ngFor="let image of images; let id = index" class="no-padding">
+                    <a href="#" class="btn" (click)="deletePhoto(id)"><ion-icon name="trash" class="deleteIcon"></ion-icon>Delete</a>
+                    <img [src]="image" *ngIf="image" />
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+
+            <ul>
+            <li *ngFor="let page of pages">
+               {{page.id}} - {{page.first_name}}
+            </li>
+           </ul>
+      
+        <ion-list>
+          <ion-item *ngFor="let post of posts">
+          <a href=""><h1>{{post.data.title}}</h1></a>
+            <img [src]="post.data.url" />
+            <img [src]="post.data.thumbnail" />
+          </ion-item>
+        </ion-list>
+
+  
+    --> 
+          <ion-card>
+    <ion-card-header>
+      Response
+    </ion-card-header>
+    <ion-card-content>
+      <b>{{data.response}}</b>
+    </ion-card-content>
+  </ion-card>
+        
+
+
+          <!-- end -->
+        </ion-card-content>
+    </ion-wizard-step>
+  </ion-simple-wizard>
+
+  
+
+
+</ion-content>

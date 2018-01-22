@@ -1,0 +1,25 @@
+<ion-header>
+  <ion-navbar hideBackButton="true">
+    <ion-title>Signature 2</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+ <h2>Enter Trustee Signature</h2>
+<signature-pad [options]="signaturePadOptions"  id="signatureCanvas"></signature-pad>
+<ion-grid>
+  <ion-row>
+    <ion-col col-6>
+      <button ion-button full color="danger" (click)="drawCancel()">Cancel</button> 
+    </ion-col>
+    <ion-col col-6>
+      <button ion-button full color="light" (click)="drawClear()">Clear</button> 
+    </ion-col>
+    <ion-col col-12>
+      <button ion-button full color="secondary" (click)="drawComplete()">Export Portfolio</button> 
+    </ion-col>
+  </ion-row>
+</ion-grid>
+
+
+</ion-content>

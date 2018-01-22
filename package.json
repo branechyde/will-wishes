@@ -1,5 +1,5 @@
 {
-  "name": "ionic-welcome",
+  "name": "ionic-willwish",
   "version": "0.0.1",
   "author": "Ionic Framework",
   "homepage": "http://ionicframework.com/",
@@ -12,6 +12,7 @@
     "ionic:serve": "ionic-app-scripts serve"
   },
   "dependencies": {
+    "@angular/animations": "^5.0.1",
     "@angular/common": "5.0.1",
     "@angular/compiler": "5.0.1",
     "@angular/compiler-cli": "5.0.1",
@@ -20,21 +21,38 @@
     "@angular/http": "5.0.1",
     "@angular/platform-browser": "5.0.1",
     "@angular/platform-browser-dynamic": "5.0.1",
+    "@ionic-native/barcode-scanner": "4.3.0",
+    "@ionic-native/email-composer": "4.3.0",
+    "@ionic-native/facebook": "4.3.0",
+    "@ionic-native/in-app-browser": "4.3.0",
+    "@ionic-native/social-sharing": "4.3.0",
+    "@ionic-native/base64": "^4.5.2",
+    "@ionic-native/camera": "^4.4.2",
     "@ionic-native/core": "4.3.3",
+    "@ionic-native/file": "^4.5.2",
+    "@ionic-native/file-transfer": "^4.5.2",
     "@ionic-native/splash-screen": "4.3.3",
     "@ionic-native/status-bar": "4.3.3",
+    "angular2-signaturepad": "^2.4.0",
     "@ionic/storage": "2.1.3",
+    "cordova-browser": "^5.0.3",
+    "cordova-ios": "~4.5.3",
+    "cordova-plugin-camera": "^3.0.0",
     "cordova-plugin-device": "^1.1.4",
+    "cordova-plugin-file": "^5.0.0",
+    "cordova-plugin-file-transfer": "^1.7.0",
     "cordova-plugin-ionic-webview": "^1.1.16",
+    "cordova-plugin-ios-camera-permissions": "^1.2.0",
     "cordova-plugin-splashscreen": "^4.0.3",
     "cordova-plugin-whitelist": "^1.3.1",
+    "cordova-plugin-x-toast": "^2.6.0",
     "ionic-angular": "3.9.2",
     "ionic-plugin-keyboard": "^2.2.1",
     "ionicons": "3.0.0",
     "rxjs": "5.5.2",
     "sw-toolbox": "3.6.0",
-    "zone.js": "0.8.18",
-    "cordova-ios": "~4.5.3"
+    "web-animations-js": "^2.3.1",
+    "zone.js": "0.8.18"
   },
   "devDependencies": {
     "@ionic/app-scripts": "3.1.0",
@@ -43,14 +61,33 @@
   "description": "An Ionic project",
   "cordova": {
     "plugins": {
+      "cordova-plugin-crosswalk-webview": {},
+      "cordova-plugin-inappbrowser": {},
+      "cordova-plugin-x-socialsharing": {},
+      "phonegap-plugin-barcodescanner": {},
       "ionic-plugin-keyboard": {},
       "cordova-plugin-whitelist": {},
       "cordova-plugin-device": {},
       "cordova-plugin-splashscreen": {},
-      "cordova-plugin-ionic-webview": {}
+      "cordova-plugin-ionic-webview": {},
+      "cordova-plugin-camera": {
+        "CAMERA_USAGE_DESCRIPTION": "Camera Access",
+        "PHOTOLIBRARY_USAGE_DESCRIPTION": "Photo library Access"
+      },
+      "cordova-plugin-statusbar": {},
+      "cordova-plugin-ios-camera-permissions": {
+        "CAMERA_USAGE_DESCRIPTION": "This app needs camera access",
+        "MICROPHONE_USAGE_DESCRIPTION": "This app needs microphone access",
+        "PHOTOLIBRARY_ADD_USAGE_DESCRIPTION": "This app needs write-access to photo library",
+        "PHOTOLIBRARY_USAGE_DESCRIPTION": "This app needs read/write-access photo library access"
+      },
+      "cordova-plugin-file-transfer": {},
+      "cordova-plugin-file": {},
+      "cordova-plugin-x-toast": {}
     },
     "platforms": [
-      "ios"
+      "ios",
+      "browser"
     ]
   }
 }
