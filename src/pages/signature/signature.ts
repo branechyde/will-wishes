@@ -82,24 +82,24 @@ export class SignaturePage {
  uploadFile(signature) {
    let random = this.generateRandomValue(27, 2);
    this.uid = 2; //user id
-  let Filename = '2_'+random + 'bequeathed'
+  let Filename = '2_'+random + 'sig1.png'
   let loader = this.loadingCtrl.create({
     content: "Uploading..."
   });
   loader.present();
   const fileTransfer: FileTransferObject = this.transfer.create();
   let options: FileUploadOptions = {
-    fileKey: Filename,
+    fileKey: 'file',
     fileName: Filename,
     chunkedMode: true,
-    mimeType: "image/jpeg",
+    mimeType: "image/png",
     headers: {}
   }
 
   fileTransfer.upload(signature, 'http://bartcleaningservices.co.uk/upload.php', options)
     .then((data) => {
     loader.dismiss();
-    this.presentToast("Signature uploaded successfully "+ Filename);
+    this.presentToast("Signature uploaded successfully ");
   }, (err) => {
     console.log(err);
     loader.dismiss();
@@ -111,7 +111,7 @@ export class SignaturePage {
 presentToast(msg) {
   let toast = this.toastCtrl.create({
     message: msg,
-    duration: 3000,
+    duration: 1000,
     position: 'bottom'
   });
 

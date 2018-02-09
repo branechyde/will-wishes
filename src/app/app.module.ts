@@ -14,6 +14,7 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AuthService } from '../providers/auth-service/auth-service';
+import {Storage, IonicStorageModule } from '@ionic/storage';
 
 import { IonSimpleWizard } from '../pages/ion-simple-wizard/ion-simple-wizard.component';
 import { IonSimpleWizardStep } from '../pages/ion-simple-wizard/ion-simple-wizard.step.component';
@@ -66,7 +67,8 @@ import { Config } from './app.config';
     BrowserModule,HttpModule,SignaturePadModule,
     HttpModule,
     BrowserAnimationsModule,
-    IonicModule.forRoot(MyApp)
+    IonicModule.forRoot(MyApp),
+    IonicStorageModule.forRoot()
   ],
   exports: [
     TruncatePipe,

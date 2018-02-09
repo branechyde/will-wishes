@@ -1,29 +1,54 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
-import { HomePage } from '../home/home';
-/**
- * Generated class for the Login page.
- *
- * See http://ionicframework.com/docs/components/#navigation for more info
- * on Ionic pages and navigation.
- */
-@IonicPage()
+import { NavController, NavParams, ToastController, LoadingController } from 'ionic-angular';
+import { Storage } from '@ionic/storage';
+
+import { WordpressService } from '../services/wordpress.service';
+import { HomePage} from '../home/home';
+
 @Component({
-  selector: 'page-login',
-  templateUrl: 'login.html',
+  templateUrl: './login.html',
+  providers: [ WordpressService ]
 })
 export class Login {
+  success: any;
+  account: {username: string, password: string} = {
+    username: '',
+    password: ''
+  };
+  
+  constructor(
+    private navParams: NavParams,
+    private navController: NavController,
+    private loadingController: LoadingController,
+    private toastController: ToastController,
+    private storage: Storage,
+    private wordpressService: WordpressService) { this.success = navParams.get('success'); }
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  login() {
+    let loader = this.loadingController.create({
+      content: "Please wait"
+    });
+    loader.present();
+
+    this.wordpressService.login(this.account).subscribe((result) => {
+      loader.dismiss();
+      this.storage.set('wordpress.user', result);
+      this.navController.push(HomePage, {
+        user: result
+      });
+    }, (error) => {
+      loader.dismiss();
+      let errorMessage = error.json();
+      if (errorMessage && errorMessage.message) {
+        let message = errorMessage.message.replace(/<(?:.|\n)*?>/gm, '');
+        let toast = this.toastController.create({
+          message: message,
+          duration: 6000,
+          position: 'bottom'
+        });
+        toast.present();
+      }
+    });
   }
-
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad Login');
-  }
-
-  login(){
-    //Api connections
-    this.navCtrl.push(HomePage);
-    }
 
 }

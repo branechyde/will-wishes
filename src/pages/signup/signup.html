@@ -9,21 +9,27 @@
 
 <ion-content padding id="signup">
  <img src="assets/imgs/logo.png" class="center" width="120px" />
-<ion-list class="loginMargin">
 
-  <ion-item>
-      <ion-label floating>Name</ion-label>
-      <ion-input type="text" name="name" [(ngModel)]="data.name"></ion-input>
-    </ion-item>
+       <p text-center *ngIf="data.response.errors " > Invalid email address  </p>
+       <p text-center *ngIf="data.response.result == 'false'" > You have errors in your form.</p>
 
+  <ion-list class="loginMargin">
     <ion-item>
       <ion-label floating>Username</ion-label>
       <ion-input type="text" name="username" [(ngModel)]="data.username"></ion-input>
+       <p *ngIf="data.response.username == ''" > Please enter a username  </p>
+    </ion-item>
+
+     <ion-item>
+      <ion-label floating>Email</ion-label>
+      <ion-input type="text" name="email" [(ngModel)]="data.email"></ion-input>
+       <p *ngIf="data.response.email == ''" > Please enter an email </p>
     </ion-item>
 
     <ion-item>
       <ion-label floating>Password</ion-label>
       <ion-input type="password" name="password" [(ngModel)]="data.password"></ion-input>
+       <p *ngIf="data.response.password == ''" > Please enter a password  </p>
     </ion-item>
 
      <button ion-button block color="secondary" class="loginbtn" (click)="signup()">Signup now</button>
@@ -35,8 +41,14 @@
       Response
     </ion-card-header>
     <ion-card-content>
-      <b>{{data.response}}</b>
+      <b>{{data.response.username}}</b>
+      <b>{{data.response.email}}</b>
+      <b>{{data.response.password}}</b>
+      <b>{{data.response.result}}</b>
+      <b>{{data.response.errors}}</b>
     </ion-card-content>
   </ion-card>
 -->
+            
+
 </ion-content>

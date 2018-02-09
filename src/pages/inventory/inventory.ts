@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import {  NavController, AlertController, Events, LoadingController, ToastController, App, NavParams } from 'ionic-angular';
 import { AuthService } from "../../providers/auth-service/auth-service";
+import { Storage } from '@ionic/storage';
 import { Http } from '@angular/http'; 
 import 'rxjs/add/operator/map';
 import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer';
@@ -26,26 +27,50 @@ export class InventoryPage {
   public images: any;
   public filenames: any;
   public uid: any;
+  public tagID: any;
+  session: any;
   data:any = {};
   //Multistep variables
   step: any;
   stepCondition: any;
   stepDefaultCondition: any;
   currentStep: any;
+  showDelete: any;
+  Readonly: boolean;
+  Name: any;
+  Dob: any;
+  Preparedby: any;
+  Address: any;
+  City: any;
 
-  constructor(public navCtrl: NavController, public app: App, public navParams: NavParams, public http: Http, public alertCtrl: AlertController, public evts: Events, private camera: Camera, public authService: AuthService, private transfer: FileTransfer,
-  public loadingCtrl: LoadingController,
-  public toastCtrl: ToastController) {
+  signatureImage : any;
+  user: any;
+
+  constructor(
+    public navCtrl: NavController, 
+    public app: App, 
+    public navParams: NavParams, 
+    private storage: Storage,
+    public http: Http, 
+    public alertCtrl: AlertController, 
+    public evts: Events, 
+    private camera: Camera, 
+    public authService: AuthService, 
+    private transfer: FileTransfer,
+    public loadingCtrl: LoadingController,
+    public toastCtrl: ToastController) {
         this.data.uid = '';
-        this.data.title = '';
-        this.data.description = '';
+        this.data.slug = '';
+        this.data.name = '';
+        this.data.preparedby = '';
         this.data.address = '';
         this.data.city = '';
         this.data.postcode = '';
-        this.data.worth = '';
-        this.data.other = '';
+        this.data.assetname = '';
+        this.data.description = '';
+        this.data.dob = '';
+        this.data.bequeathedto = '';
         this.data.response = '';
-        this.http = http;
         this.data.filename = '';
     /**
      * Step Wizard Settings
@@ -53,6 +78,7 @@ export class InventoryPage {
     this.step = 1;//The value of the first step, always 1
     this.stepCondition = true;//Set to true if you don't need condition in every step
     this.stepDefaultCondition = this.stepCondition;//Save the default condition for every step
+
     //You can subscribe to the Event 'step:changed' to handle the current step
     this.evts.subscribe('step:changed', step => {
       //Handle the current step if you need
@@ -60,41 +86,31 @@ export class InventoryPage {
       //Set the step condition to the default value
       this.stepCondition = this.stepDefaultCondition;
     });
+
     this.evts.subscribe('step:next', () => {
       //Do something if next
       console.log('Next pressed: ', this.currentStep);
     });
+
     this.evts.subscribe('step:back', () => {
       //Do something if back
       console.log('Back pressed: ', this.currentStep);
     });
-    
+
+    this.showDelete = false;
+    this.Readonly = false;    
   }
 
   toggle() {
-    this.stepCondition = !this.stepCondition;
-  }
-  getIconStep2() {
-    return this.stepCondition ? 'unlock' : 'lock';
-  }
-
-  getIconStep3() {
-    return this.stepCondition ? 'happy' : 'sad';
-  }
-  getLikeIcon() {
-    return this.stepCondition ? 'thumbs-down' : 'thumbs-up';
-  }
-  goToExample2() {
-   // this.navCtrl.push(DynamicPage);
+    //this.stepCondition = !this.stepCondition;
+    this.showDelete = !this.showDelete;
   }
   
-  //If there is a change in the textfield
-  textChange(e) {
-    if (e.target.value && e.target.value.trim() !== '') {
+  //If required fields are not empty 
+  textChange() {
+    if (this.data.name !== '' && this.data.dob  !== '' && this.data.preparedby  !== '') {
       this.stepCondition = true;
-    } else {
-      this.stepCondition = false;
-    }
+    } 
   }
  
 
@@ -102,18 +118,90 @@ export class InventoryPage {
     this.images = [];
     this.photos = [];
     this.filenames = [];
-    this.getPages();
-    this.getData();
+    //this.getPages();
+    //this.getData();
+    this.getID();
+    //get the tagid of the tagname
+    //this.getTagID('E170444018962530');
+    this.getStep1();  
   }
+
+  // Get session id if exist
+  getID() {
+    this.storage.get('session_id')
+    .then((data) => {
+      this.session = data;
+      //if session is null, create a new one
+      if (this.session == null) {
+        this.session = this.generateRandomValue(200000, 1000000);
+        this.storage.set('session_id', this.session);
+      } 
+      this.data.slug = this.session;
+    });
+  }
+
   /**
    * What happens when finish button is pressed
    */
   onFinish() {
-    this.navCtrl.setRoot(ViewPosts);
-    //send the form data
+  	if (this.Readonly == false) {
+    this.storage.set('name', this.data.name);
+    this.storage.set('dob', this.data.dob);
+    this.storage.set('preparedby', this.data.preparedby);
+    this.storage.set('address', this.data.address);
+    this.storage.set('city', this.data.city);
+    }
+     //send the form data
     this.sendData();
+    //Pass data and switch to homepage
+    this.gotoHomepage();
+    //this.navCtrl.setRoot(ViewPosts, {tagID: this.tagID});
+    //this.navCtrl.insert(0,HomePage);
+    //this.navCtrl.popToRoot();
+  }
+  
+  gotoHomepage() {
+      this.storage.get('wordpress.user')
+      .then(data => {
+          if(data) {
+            this.user = data;
+            this.navCtrl.push(HomePage, {signatureImage: 1, user: this.user});
+          }
+      });
   }
 
+
+  getStep1() {
+    this.storage.get('name').then((data) => {
+      this.Name = data;
+      if (this.Name != null) {
+       this.Readonly = true;    
+      } else {
+       this.Readonly = false; 
+      }
+    });
+    this.storage.get('dob').then((data) => {
+      this.Dob = data;
+    });
+    this.storage.get('preparedby').then((data) => {
+      this.Preparedby = data;
+    });
+    this.storage.get('address').then((data) => {
+      this.Address = data;
+    });
+    this.storage.get('city').then((data) => {
+      this.City = data;
+    });
+  }
+  
+
+  /* 
+  public getTagID(slug) {
+      return this.http.get(`http://bartcleaningservices.co.uk/wp-json/wp/v2/tags?slug=${slug}`).map(result => result.json()).subscribe(data => {
+      this.tagID = data[0].id;
+      });
+   }
+  
  //Get pages from trendigadgets or from test site
  public getPages() {
     return this.http.get('https://api.myjson.com/bins/ctyoh')
@@ -128,14 +216,23 @@ export class InventoryPage {
     this.posts = result.data.children;
     });
   }
-  
+  */
+
   sendData() {
+  	this.getStep1();
     var link = 'http://bartcleaningservices.co.uk/api.php';
-    var myData = JSON.stringify({uid: this.data.uid, title: this.data.title, description: this.data.description, address: this.data.address, city: this.data.city, postcode: this.data.postcode, worth: this.data.worth, other: this.data.other});
-   
+    if (this.Readonly) {
+    	var myData = JSON.stringify({uid: this.data.uid, slug: this.data.slug, name: this.Name, preparedby: this.Preparedby, 
+    	                         assetname: this.data.assetname, description: this.data.description, address: this.Address, 
+                                city: this.City, dob: this.Dob, bequeathedto: this.data.bequeathedto});
+    } else {
+       var myData = JSON.stringify({uid: this.data.uid, slug: this.data.slug, name: this.data.name, preparedby: this.data.preparedby, 
+    	                         assetname: this.data.assetname, description: this.data.description, address: this.data.address, 
+                                city: this.data.city, postcode: this.data.postcode, dob: this.data.dob, bequeathedto: this.data.bequeathedto});
+    }
     this.http.post(link, myData)
     .subscribe(data => {
-      this.data.response = data["_body"]; //https://stackoverflow.com/questions/39574305/property-body-does-not-exist-on-type-response
+      this.data.response = data["_body"]; //retrieve tag id here and pass it to next page ts
     }, error => {
         console.log("Oooops!");
     });
@@ -249,8 +346,8 @@ chooseMedia() {
  //upload file
  uploadFile() {
    let random = this.generateRandomValue(27, 2);
-   this.uid = 2; //user id
-  let Filename = this.uid+'_'+random + 'ion'
+   this.uid = 2; //tagname
+  let Filename = this.uid+'_'+random + 'ion.jpg'
   let loader = this.loadingCtrl.create({
     content: "Uploading..."
   });
@@ -258,8 +355,8 @@ chooseMedia() {
   const fileTransfer: FileTransferObject = this.transfer.create();
 
   let options: FileUploadOptions = {
-    fileKey: Filename,
-    fileName: Filename,
+    fileKey: 'file', //fileKey: 'file',
+    fileName: Filename,//fileName: 'name.jpg',
     chunkedMode: true,
     mimeType: "image/jpeg",
     headers: {}
@@ -273,9 +370,9 @@ chooseMedia() {
     //save filename into array
     this.filenames.push(Filename);
     loader.dismiss();
-    this.presentToast("Image uploaded successfully "+ Filename);
+    this.presentToast("Image uploaded successfully ");
   }, (err) => {
-    console.log(err);
+    //console.log(err);
     loader.dismiss();
     this.presentToast(err);
   });
@@ -284,7 +381,7 @@ chooseMedia() {
 presentToast(msg) {
   let toast = this.toastCtrl.create({
     message: msg,
-    duration: 3000,
+    duration: 1000,
     position: 'bottom'
   });
 
@@ -305,12 +402,13 @@ presentToast(msg) {
     * @param max     {Number}   		Maximum numeric value
     * @return {Number}
     */
-   generateRandomValue(min : number, max : number) : number
-   {
+   //
+  generateRandomValue(min : number, max : number) : number {
       let maxVal : number     = max,
           minVal : number     = min,
           genVal : number;
-
+      let time : number;
+      let slug : any;
       // Generate max value
       if(maxVal === 0)
       {
@@ -328,16 +426,11 @@ presentToast(msg) {
          minVal = 0;
       }
 
-      genVal  = minVal + (maxVal - minVal) * Math.random();
-
-      return genVal;
+      genVal  = Math.floor(Math.random() * (maxVal - minVal + 1)) + minVal;
+      time = Math.floor(Date.now() / 1000);
+      slug = 'E' + (genVal * time);
+      return slug;
    }
-
-  
-
-
-
-
 
 
 }

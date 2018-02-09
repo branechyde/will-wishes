@@ -6,6 +6,7 @@ import {HomePage} from '../home/home';
 import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
 import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer';
+import { Storage } from '@ionic/storage';
 
 @Component({
   selector: 'page-signature2',
@@ -22,10 +23,14 @@ export class SignaturePage2 {
   public signatureImage : any;
   public random: number;
   public uid: any;
-  
+  data:any = {};
+  user: any;
+
   constructor(private navParams: NavParams, public navCtrl: NavController, public http: Http, 
   private transfer: FileTransfer, public loadingCtrl: LoadingController,
-  public toastCtrl: ToastController, public app: App,) { this.signatureImage = navParams.get('signatureImage'); }
+  public toastCtrl: ToastController, public app: App, private storage: Storage) { 
+    this.signatureImage = navParams.get('signatureImage'); 
+  }
 
   canvasResize() {
     let canvas = document.querySelector('canvas');
@@ -53,18 +58,26 @@ export class SignaturePage2 {
 
   
   drawCancel() {
-    this
-      .navCtrl
-      .push(SignaturePage);
+    this.navCtrl.push(SignaturePage);
   }
 
    drawComplete() {
-    this.signatureImage = this
-      .signaturePad
-      .toDataURL();
-      this.uploadFile(this.signatureImage);
-     this.navCtrl.push(HomePage, {signatureImage: this.signatureImage});
-    //this.navCtrl.setRoot(ContactPage);
+    this.signatureImage = this.signaturePad.toDataURL();
+    //Get slug from storage
+    this.storage.get('session_id')
+      .then((data) => {
+        //upload file with embeded slug id/tag
+        this.uploadFile(this.signatureImage, data);
+      });
+    //Remove current tag id
+    this.storage.remove('session_id');
+    this.storage.remove('name');
+    this.storage.remove('dob');
+    this.storage.remove('preparedby');
+    this.storage.remove('address');
+    this.storage.remove('city');
+    //get the current user object for the homepage
+    this.getUser();
   }
 
   drawClear() {
@@ -73,28 +86,50 @@ export class SignaturePage2 {
       .clear();
   }
 
+  getUser() {
+      this.storage.get('wordpress.user')
+      .then(data => {
+          if(data) {
+            this.user = data;
+            this.navCtrl.push(HomePage, {signatureImage: this.signatureImage, user: this.user});
+          }
+      });
+  }
+  
+  /* 
+  addSignature() {
+    var link = 'http://bartcleaningservices.co.uk/addsignature.php';
+    var myData = JSON.stringify({uid: this.data.uid, tag: this.data.tag});
+    this.http.post(link, myData)
+    .subscribe(data => {
+      this.data.response = data["_body"]; 
+    }, error => {
+        console.log("Oooops!");
+    });
+  }
+  */
+
 //upload signature to server
- uploadFile(signature) {
-   let random = this.generateRandomValue(27, 2);
-   this.uid = 2; //user id
-  let Filename = '2_'+random + 'trustee'
+ uploadFile(signature, slug) {
+  let random = this.generateRandomValue(27, 2);
+  let Filename = slug+'_'+random + 'sig2.png'
   let loader = this.loadingCtrl.create({
     content: "Uploading..."
   });
   loader.present();
   const fileTransfer: FileTransferObject = this.transfer.create();
   let options: FileUploadOptions = {
-    fileKey: Filename,
+    fileKey: 'file',
     fileName: Filename,
     chunkedMode: true,
-    mimeType: "image/jpeg",
+    mimeType: "image/png",
     headers: {}
   }
 
-  fileTransfer.upload(signature, 'http://bartcleaningservices.co.uk/upload.php', options)
+  fileTransfer.upload(signature, 'http://bartcleaningservices.co.uk/addsignature.php', options)
     .then((data) => {
     loader.dismiss();
-    this.presentToast("Signature uploaded successfully "+ Filename);
+    this.presentToast("Signature uploaded successfully ");
   }, (err) => {
     console.log(err);
     loader.dismiss();
@@ -106,7 +141,7 @@ export class SignaturePage2 {
 presentToast(msg) {
   let toast = this.toastCtrl.create({
     message: msg,
-    duration: 3000,
+    duration: 1000,
     position: 'bottom'
   });
 

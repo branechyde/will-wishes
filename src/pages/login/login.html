@@ -8,20 +8,30 @@
 </ion-header>
 
 <ion-content padding id="login">
+  <form (submit)="login()">
   <img src="assets/imgs/logo.png" class="center" width="120px" />
+
+  <ion-item *ngIf="success" >
+      <h2>Account created, please login.</h2>
+      <img src="assets/imgs/success.png" />
+    </ion-item>
+
 <ion-list class="loginMargin">
 
-  <ion-item>
-    <ion-label floating>Username</ion-label>
-    <ion-input type="text" value=""></ion-input>
-  </ion-item>
+      <ion-item>
+        <ion-label fixed>Username</ion-label>
+        <ion-input type="text" [(ngModel)]="account.username" name="username"></ion-input>
+      </ion-item>
 
-  <ion-item>
-    <ion-label floating>Password</ion-label>
-    <ion-input type="password"></ion-input>
-  </ion-item>
+      <ion-item>
+        <ion-label fixed>Password</ion-label>
+        <ion-input type="password" [(ngModel)]="account.password" name="password"></ion-input>
+      </ion-item>
 
-  <button ion-button block color="secondary" class="loginbtn" (click)="login()">Login</button>
+      <div padding>
+        <button ion-button color="primary" full>{{ 'LOGIN' }}</button>
+      </div>
 
-</ion-list>
+    </ion-list>
+  </form>
 </ion-content>

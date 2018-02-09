@@ -3,6 +3,8 @@ import { NavController, NavParams, LoadingController, ToastController, ModalCont
 import { WordpressService } from '../services/wordpress.service';
 import { SinglePost } from '../singlepost/singlepost';
 import {SignaturePage} from '../signature/signature';
+import { Storage } from '@ionic/storage';
+import { HomePage} from '../home/home';
 
 @Component({
   selector: 'page-viewposts',
@@ -18,7 +20,9 @@ export class ViewPosts implements OnInit  {
 	search: string;
 	hideSearchbar: boolean;
 	favoritePosts: any;
-	public signatureImage : any;
+	public tagID : number;
+	slug : any;
+	noresults : any;
 
 	constructor(
 		private navParams: NavParams,
@@ -26,7 +30,8 @@ export class ViewPosts implements OnInit  {
 		private navController: NavController,
 		private loadingController: LoadingController,
 		private toastController: ToastController,
-		public modalController:ModalController
+		public modalController:ModalController,
+		private storage: Storage,
 		) { }
 
 	ngOnInit() {
@@ -34,9 +39,51 @@ export class ViewPosts implements OnInit  {
 		this.tag = this.navParams.get('tag');
 		this.author = this.navParams.get('author');
 		this.hideSearchbar = true;
+		//this.noresults = false;
 		this.search = '';
 		this.favoritePosts = [];
-		this.getPosts();
+		this.search = this.navParams.get('search');
+        //Get posts tagged with slug
+		this.storage.get('session_id')
+	    .then((data) => {
+	      //if no search is entered use the store session id
+	      if (this.search != null) {
+	      	this.getTagID(this.search);
+	      } else {
+	      if (data != null) {
+	      	this.getTagID(data);
+	      }
+	     }
+	      
+	    });
+       
+	}
+    
+    //get the tagid of the tagname
+	getTagID(slug) {
+		this.wordpressService.getTagID(slug)
+		.subscribe(data => {
+		// if a result is returned
+         if (typeof data !== 'undefined' && data.length > 0) {
+         this.tagID = data[0].id;
+         this.getTaggedPosts(this.tagID);
+         //save the current tag name, so if the portfolio is signed the correct tag is used to sign the signatures
+         this.storage.set('session_id', slug);
+         } else { this.noresults = 1;}
+		});
+	}
+	//Get only tagged post
+	getTaggedPosts(tagID) {
+		let loader = this.loadingController.create({
+			content: "Please wait",
+        duration: 500
+		});
+		loader.present();
+		this.wordpressService.getPostsbytag(tagID)
+		.subscribe(result => {
+			this.posts = result;
+			loader.dismiss();
+		});
 	}
 
 	getPosts() {
@@ -44,20 +91,14 @@ export class ViewPosts implements OnInit  {
 		let query = this.createQuery();
 		let loader = this.loadingController.create({
 			content: "Please wait",
-      duration: 10000
+      duration: 500
 		});
-
 		loader.present();
 		this.wordpressService.getPosts(query)
 		.subscribe(result => {
 			this.posts = result;
 			loader.dismiss();
 		});
-	}
-
-	getAuthorPosts(author) {
-		this.author = author;
-		this.getPosts();
 	}
 
 	searchPosts() {
@@ -95,10 +136,6 @@ export class ViewPosts implements OnInit  {
 		});
 	}
 
-	toggleSearchbar() {
-		this.hideSearchbar = !this.hideSearchbar;
-	}
-
 	createQuery() {
 	let query = {};
 	query['page'] = this.pageCount;
@@ -115,6 +152,12 @@ export class ViewPosts implements OnInit  {
 		query['author'] = this.author;
 	}
 	return query;
+	}
+
+	backHome() {
+		//remove the session id
+		//this.storage.remove('session_id');
+		this.navController.push(HomePage);
 	}
    
    //open signature pad

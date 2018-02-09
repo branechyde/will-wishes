@@ -5,13 +5,14 @@ import 'rxjs/add/operator/map';
 
 @Injectable()
 export class WordpressService {
+   public tagID : any;
    public wordpressApiUrl = 'http://bartcleaningservices.co.uk/wp-json';
    //public wordpressApiUrl = 'https://julienrenaux.fr/wp-json';
 
 	constructor(private http: Http) {}
 
 	public signup(data) {
-		let url = this.wordpressApiUrl + '/jwt-auth/v1/token';
+		let url = 'http://bartcleaningservices.co.uk/create_user.php';
 		return this.http.post(url, data)
 	  	.map(result => {
 			return result.json();
@@ -29,13 +30,27 @@ export class WordpressService {
 	public getPosts(query) {
 		query = this.transformRequest(query);
 		let url = this.wordpressApiUrl + `/wp/v2/posts?${query}&_embed`;
-		//let url = this.wordpressApiUrl + `/wp/v2/posts?author=1`;
-	
 		return this.http.get(url)
 	  	.map(result => {
 			return result.json();
 		});    
 	}
+    //Get posts by tag id
+	public getPostsbytag(id) {
+		let url = this.wordpressApiUrl + `/wp/v2/posts?tags=${id}&per_page=100`;
+		return this.http.get(url)
+	  	.map(result => {
+			return result.json();
+		});    
+	}
+    //Get the id of a tag by its slug
+	public getTagID(slug) {
+	  let url = this.wordpressApiUrl + `/wp/v2/tags?slug=${slug}`;
+      return this.http.get(url)
+      .map(result => {
+			return result.json();
+	  });    
+   }
 
 	public getPost(id) {
 		return this.http.get(this.wordpressApiUrl + `/wp/v2/posts/${id}?_embed`)

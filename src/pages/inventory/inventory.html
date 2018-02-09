@@ -3,64 +3,91 @@
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title>Create Inventory</ion-title>
+    <ion-title>Create Portfolio</ion-title>
   </ion-navbar>
 </ion-header>
 
-
-<ion-content>
+<ion-content scroll="false">
   <ion-simple-wizard [(step)]="step" [showSteps]="false" (finish)="onFinish()" [finishIcon]="'done-all'" [(stepCondition)]="stepCondition">
     <ion-wizard-step>
-  
-        <ion-card-content>
+        <ion-card-content>&nbsp;&nbsp;<b>Report ID: {{ session }}</b>
           <ion-card-title text-center><ion-icon  name="arrow-dropright-circle" color="primary"></ion-icon>&nbsp;Step 1 </ion-card-title>
-          <p text-center>Simply complete the following fields and press the next button.</p>
-          <ion-list>
+          <p text-center>Enter client details</p>
+          <ion-list *ngIf="!Readonly">
 
             <ion-item>
-               <ion-label floating>Title</ion-label>
-              <ion-input type="text" name="title" [(ngModel)]="data.title"></ion-input>
+               <ion-label stacked >Client Name</ion-label>
+              <ion-input type="text" name="name" [(ngModel)]="data.name" ></ion-input>
            </ion-item>
 
             <ion-item>
-            <ion-label floating>Description</ion-label>
-            <ion-textarea name="description" [(ngModel)]="data.description"></ion-textarea>
+            <ion-label stacked color="primary">Date of Birth</ion-label>
+            <ion-input  type="text" name="dob" [(ngModel)]="data.dob" ></ion-input>
           </ion-item>
 
+            <ion-item>
+               <ion-label stacked >Prepared By</ion-label>
+              <ion-input type="text" name="preparedby" [(ngModel)]="data.preparedby"></ion-input>
+           </ion-item>
+
            <ion-item>
-             <ion-label floating>Address</ion-label>
+             <ion-label stacked >Address</ion-label>
               <ion-input type="text" name="address" [(ngModel)]="data.address"></ion-input>
             </ion-item>
-             <ion-input type="hidden" name="uid" [(ngModel)]="data.uid" value="{{uid}}"></ion-input>
-          </ion-list>
+
+        <ion-item>
+          <ion-label stacked color="primary">City</ion-label>
+          <ion-input  type="text" placeholder="Your city" name="city" [(ngModel)]="data.city" ></ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-label stacked color="primary">Postcode</ion-label>
+          <ion-input  type="text" placeholder="i.e. SW1 4AD" name="postcode" [(ngModel)]="data.postcode"></ion-input>
+        </ion-item>
+         
+      </ion-list>
+
+      <ion-list *ngIf="Readonly">
+        <ion-item>
+           <p><b>Client Name:</b> <span>{{Name}}</span></p>
+       </ion-item>
+       <ion-item>
+           <p><b>Date of Birth:</b> <span>{{Dob}}</span></p>
+       </ion-item>
+       <ion-item>
+           <p><b>Prepared By:</b> <span>{{Preparedby}}</span></p>
+       </ion-item>
+       <ion-item>
+           <p><b>Address:</b> <span>{{Address}}</span></p>
+       </ion-item>
+       <ion-item>
+           <p><b>City:</b> <span>{{City}}</span></p>
+       </ion-item>
+      </ion-list>
+      <ion-input type="hidden" name="uid" [(ngModel)]="data.uid" value="{{uid}}"></ion-input>
+
       </ion-card-content>
-  
   </ion-wizard-step>
 
     <ion-wizard-step>
         <ion-card-content>
           <ion-card-title text-center><ion-icon  name="arrow-dropright-circle" color="primary"></ion-icon>&nbsp;Step 2</ion-card-title>
-          <p text-center>Enter current market value of Asset.</p>
+          <p text-center>Enter Asset details</p>
            <ion-list>
 
-              <ion-item>
-                <ion-label stacked color="primary">City</ion-label>
-                <ion-input  type="text" placeholder="Your city" name="city" [(ngModel)]="data.city"></ion-input>
-              </ion-item>
+            <ion-item>
+               <ion-label stacked >Asset Name</ion-label>
+              <ion-input type="text" name="assetname" [(ngModel)]="data.assetname"></ion-input>
+           </ion-item>
 
-              <ion-item>
-                <ion-label stacked color="primary">Postcode</ion-label>
-                <ion-input  type="text" placeholder="i.e. SW1 4AD" name="postcode" [(ngModel)]="data.postcode"></ion-input>
-              </ion-item>
-
-                <ion-item>
-                <ion-label stacked color="primary">Asset value</ion-label>
-                <ion-input  type="text" placeholder="Estimated Value" name="worth" [(ngModel)]="data.worth"></ion-input>
-              </ion-item>
+            <ion-item>
+            <ion-label stacked >Description</ion-label>
+            <ion-textarea name="description" [(ngModel)]="data.description"></ion-textarea>
+          </ion-item>
 
               <ion-item>
                 <ion-label stacked color="primary">Bequeathed To</ion-label>
-                <ion-input  type="text" placeholder="Who is this to be left to" name="other" [(ngModel)]="data.other"></ion-input>
+                <ion-input  type="text" placeholder="Who is this to be left to" name="other" [(ngModel)]="data.bequeathedto"></ion-input>
               </ion-item>
           
           </ion-list>
@@ -80,13 +107,12 @@
             <ion-grid no-padding>
               <ion-row>
                 <ion-col col-6 *ngFor="let photo of photos; let id = index" class="no-padding">
-                    <a href="#" class="btn" (click)="deletePhoto(id)"><ion-icon name="trash" class="deleteIcon"></ion-icon>Delete</a>
-                    <img [src]="photo" *ngIf="photo" />
+                   <a *ngIf="showDelete" href="#" class="btn" (click)="deletePhoto(id)"><ion-icon name="trash" class="deleteIcon"></ion-icon>Delete</a>
+                    <img [src]="photo" *ngIf="photo" (click)="toggle()"/>
                 </ion-col>
               </ion-row>
             </ion-grid>
 
-    
           <!--
           <ion-item>
             <h4>Image Preview</h4>
@@ -115,9 +141,8 @@
           </ion-item>
         </ion-list>
 
-  
-    --> 
-          <ion-card>
+    
+    <ion-card>
     <ion-card-header>
       Response
     </ion-card-header>
@@ -125,7 +150,7 @@
       <b>{{data.response}}</b>
     </ion-card-content>
   </ion-card>
-        
+        --> 
 
 
           <!-- end -->

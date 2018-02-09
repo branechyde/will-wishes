@@ -1,4 +1,15 @@
 page-singlepost {
 
+	ion-item, .item-block {
+	 margin-top:0!important;
+	 padding-top: 0!important;
+	 padding-bottom: 0!important;
+	 border: none;
+	}
+
+	ion-list, .list {
+	 border: 0!important;
+	}
+
 }
 
