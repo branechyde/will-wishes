@@ -113,7 +113,7 @@
               </ion-row>
             </ion-grid>
 
-          <!--
+        
           <ion-item>
             <h4>Image Preview</h4>
           </ion-item>
@@ -121,12 +121,12 @@
            <ion-grid no-padding>
               <ion-row>
                 <ion-col col-6 *ngFor="let image of images; let id = index" class="no-padding">
-                    <a href="#" class="btn" (click)="deletePhoto(id)"><ion-icon name="trash" class="deleteIcon"></ion-icon>Delete</a>
-                    <img [src]="image" *ngIf="image" />
+                    <a *ngIf="showDelete" href="#" class="btn" (click)="deletePhoto(id)"><ion-icon name="trash" class="deleteIcon"></ion-icon>Delete</a>
+                    <img [src]="image" *ngIf="image" (click)="toggle()" />
                 </ion-col>
               </ion-row>
             </ion-grid>
-
+          <!--
             <ul>
             <li *ngFor="let page of pages">
                {{page.id}} - {{page.first_name}}

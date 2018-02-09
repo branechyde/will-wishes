@@ -365,7 +365,7 @@ chooseMedia() {
   fileTransfer.upload(this.imageURI, 'http://bartcleaningservices.co.uk/upload.php', options)
     .then((data) => {
     //this.getData();
-    this.image = "http://bartcleaningservices.co.uk/upload/"+ Filename+ ".jpg"
+    this.image = "http://bartcleaningservices.co.uk/upload/file"+ this.uid + "/" + Filename;
     this.images.push(this.image);
     //save filename into array
     this.filenames.push(Filename);
