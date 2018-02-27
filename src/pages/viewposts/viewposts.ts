@@ -24,6 +24,13 @@ export class ViewPosts implements OnInit  {
 	slug : any;
 	noresults : any;
 
+	Name: any;
+  	Dob: any;
+  	Preparedby: any;
+  	Address: any;
+  	City: any;
+  	Postcode: any;
+
 	constructor(
 		private navParams: NavParams,
 		private wordpressService: WordpressService,
@@ -56,9 +63,8 @@ export class ViewPosts implements OnInit  {
 	     }
 	      
 	    });
-       
 	}
-    
+
     //get the tagid of the tagname
 	getTagID(slug) {
 		this.wordpressService.getTagID(slug)
@@ -82,6 +88,12 @@ export class ViewPosts implements OnInit  {
 		this.wordpressService.getPostsbytag(tagID)
 		.subscribe(result => {
 			this.posts = result;
+			this.Name = result[0].acf.client_name;
+			this.Dob = result[0].acf.date_of_birth;
+			this.Preparedby = result[0].acf.prepared_by;
+			this.Address = result[0].acf.address;
+			this.City = result[0].acf.city;
+			this.Postcode = result[0].acf.postcode;
 			loader.dismiss();
 		});
 	}

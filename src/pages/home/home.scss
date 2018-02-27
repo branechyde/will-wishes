@@ -5,7 +5,8 @@ page-home {
 .page-welcome {
   .splash-bg {
     position: relative;
-    background: url('../../../assets/img/splashbg.png') no-repeat #222;
+    /* background: url('../../../assets/img/splashbg.png') no-repeat #222; */
+    background: #222;
     background-size: cover;
     height: 22%;
     z-index: 1;

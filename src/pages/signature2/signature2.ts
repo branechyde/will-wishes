@@ -126,7 +126,7 @@ export class SignaturePage2 {
     headers: {}
   }
 
-  fileTransfer.upload(signature, 'http://bartcleaningservices.co.uk/addsignature.php', options)
+  fileTransfer.upload(signature, 'http://willwishes.uk/addsignature.php', options)
     .then((data) => {
     loader.dismiss();
     this.presentToast("Signature uploaded successfully ");

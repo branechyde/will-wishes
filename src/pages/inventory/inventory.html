@@ -10,7 +10,7 @@
 <ion-content scroll="false">
   <ion-simple-wizard [(step)]="step" [showSteps]="false" (finish)="onFinish()" [finishIcon]="'done-all'" [(stepCondition)]="stepCondition">
     <ion-wizard-step>
-        <ion-card-content>&nbsp;&nbsp;<b>Report ID: {{ session }}</b>
+        <ion-card-content>
           <ion-card-title text-center><ion-icon  name="arrow-dropright-circle" color="primary"></ion-icon>&nbsp;Step 1 </ion-card-title>
           <p text-center>Enter client details</p>
           <ion-list *ngIf="!Readonly">
@@ -63,6 +63,9 @@
        <ion-item>
            <p><b>City:</b> <span>{{City}}</span></p>
        </ion-item>
+       <ion-item>
+           <p><b>Postcode:</b> <span>{{Postcode}}</span></p>
+       </ion-item>
       </ion-list>
       <ion-input type="hidden" name="uid" [(ngModel)]="data.uid" value="{{uid}}"></ion-input>
 
@@ -103,7 +106,8 @@
             <button ion-button block outline color="secondary" (click)="chooseMedia()">
             <ion-icon name="camera"></ion-icon>&nbsp;Take Photo
             </button>
-
+           
+           <!--
             <ion-grid no-padding>
               <ion-row>
                 <ion-col col-6 *ngFor="let photo of photos; let id = index" class="no-padding">
@@ -112,11 +116,8 @@
                 </ion-col>
               </ion-row>
             </ion-grid>
-
+          -->
         
-          <ion-item>
-            <h4>Image Preview</h4>
-          </ion-item>
   
            <ion-grid no-padding>
               <ion-row>

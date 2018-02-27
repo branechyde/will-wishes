@@ -6,13 +6,13 @@ import 'rxjs/add/operator/map';
 @Injectable()
 export class WordpressService {
    public tagID : any;
-   public wordpressApiUrl = 'http://bartcleaningservices.co.uk/wp-json';
+   public wordpressApiUrl = 'http://willwishes.uk/wp-json';
    //public wordpressApiUrl = 'https://julienrenaux.fr/wp-json';
 
 	constructor(private http: Http) {}
 
 	public signup(data) {
-		let url = 'http://bartcleaningservices.co.uk/create_user.php';
+		let url = 'http://willwishes.uk/create_user.php';
 		return this.http.post(url, data)
 	  	.map(result => {
 			return result.json();

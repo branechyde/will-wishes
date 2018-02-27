@@ -15,6 +15,7 @@ import { ViewPosts } from '../viewposts/viewposts';
 
 })
 export class InventoryPage {
+  public wordpressUrl = 'http://willwishes.uk';
 	public random: number;
   posts: any;
   pages: any;
@@ -42,6 +43,7 @@ export class InventoryPage {
   Preparedby: any;
   Address: any;
   City: any;
+  Postcode: any;
 
   signatureImage : any;
   user: any;
@@ -150,6 +152,7 @@ export class InventoryPage {
     this.storage.set('preparedby', this.data.preparedby);
     this.storage.set('address', this.data.address);
     this.storage.set('city', this.data.city);
+    this.storage.set('postcode', this.data.postcode);
     }
      //send the form data
     this.sendData();
@@ -192,39 +195,18 @@ export class InventoryPage {
     this.storage.get('city').then((data) => {
       this.City = data;
     });
-  }
-  
-
-  /* 
-  public getTagID(slug) {
-      return this.http.get(`http://bartcleaningservices.co.uk/wp-json/wp/v2/tags?slug=${slug}`).map(result => result.json()).subscribe(data => {
-      this.tagID = data[0].id;
-      });
-   }
-  
- //Get pages from trendigadgets or from test site
- public getPages() {
-    return this.http.get('https://api.myjson.com/bins/ctyoh')
-    .map(result => result.json().Semester).subscribe(data => {
-    this.pages = data;
+    this.storage.get('postcode').then((data) => {
+      this.Postcode = data;
     });
   }
-
-  //Get feed from reddit
-  getData() {
-    return this.http.get('https://www.reddit.com/r/gifs/new/.json?limit=20').map(result => result.json()).subscribe(result => {
-    this.posts = result.data.children;
-    });
-  }
-  */
 
   sendData() {
   	this.getStep1();
-    var link = 'http://bartcleaningservices.co.uk/api.php';
+    var link = this.wordpressUrl + '/api.php';
     if (this.Readonly) {
     	var myData = JSON.stringify({uid: this.data.uid, slug: this.data.slug, name: this.Name, preparedby: this.Preparedby, 
     	                         assetname: this.data.assetname, description: this.data.description, address: this.Address, 
-                                city: this.City, dob: this.Dob, bequeathedto: this.data.bequeathedto});
+                                city: this.City, postcode: this.Postcode, dob: this.Dob, bequeathedto: this.data.bequeathedto});
     } else {
        var myData = JSON.stringify({uid: this.data.uid, slug: this.data.slug, name: this.data.name, preparedby: this.data.preparedby, 
     	                         assetname: this.data.assetname, description: this.data.description, address: this.data.address, 
@@ -261,7 +243,7 @@ export class InventoryPage {
            let files = this.filenames;
            let filename = files[index];
            this.data.filename = filename;
-            var link = 'http://bartcleaningservices.co.uk/delete.php';
+            var link = this.wordpressUrl + '/delete.php';
             var myData = JSON.stringify({filename: this.data.filename});
             this.http.post(link, myData)
             .subscribe(data => {
@@ -315,24 +297,22 @@ chooseMedia() {
   public takePicture(sourceType) {
     // Create options for the Camera Dialog
     var options = {
-      quality: 50,
+      quality: 100,
       destinationType: this.camera.DestinationType.FILE_URI,
       sourceType: sourceType,
       allowEdit: true,
       encodingType: this.camera.EncodingType.JPEG,
-      targetWidth: 450,
-      targetHeight: 450,
+      targetWidth: 700,
+      targetHeight: 700,
       //popoverOptions: CameraPopoverOptions,
       saveToPhotoAlbum: false,
       correctOrientation: true
     };
-
     // Get the data of an image
     this.camera.getPicture(options).then(imageData => {
     	this.imageURI = imageData;
         //store photo uri
         this.photos.push(this.imageURI);
-       
         this.photos.reverse();
         this.uploadFile();
       },
@@ -362,10 +342,10 @@ chooseMedia() {
     headers: {}
   }
 
-  fileTransfer.upload(this.imageURI, 'http://bartcleaningservices.co.uk/upload.php', options)
+  fileTransfer.upload(this.imageURI, this.wordpressUrl + '/upload.php', options)
     .then((data) => {
     //this.getData();
-    this.image = "http://bartcleaningservices.co.uk/upload/file"+ this.uid + "/" + Filename;
+    this.image = this.wordpressUrl + "/upload/file" + this.uid + "/" + Filename;
     this.images.push(this.image);
     //save filename into array
     this.filenames.push(Filename);

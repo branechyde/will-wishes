@@ -11,6 +11,26 @@
 </ion-header>
 
 <ion-content>
+  <ion-list >
+       <ion-item>
+           <p><b>Client Name:</b> <span>{{Name}}</span></p>
+       </ion-item>
+       <ion-item>
+           <p><b>Date of Birth:</b> <span>{{Dob}}</span></p>
+       </ion-item>
+       <ion-item>
+           <p><b>Prepared By:</b> <span>{{Preparedby}}</span></p>
+       </ion-item>
+       <ion-item>
+           <p><b>Address:</b> <span>{{Address}}</span></p>
+       </ion-item>
+       <ion-item>
+           <p><b>City:</b> <span>{{City}}</span></p>
+       </ion-item>
+       <ion-item>
+           <p><b>Postcode:</b> <span>{{Postcode}}</span></p>
+       </ion-item>
+   </ion-list>
 
     <button detail-none (click)="loadPost(post)" ion-item *ngFor="let post of posts">
       <ion-thumbnail item-start>

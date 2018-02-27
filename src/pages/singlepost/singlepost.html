@@ -36,9 +36,23 @@
 	  </ion-row>
 	</ion-grid>
 
+	<ion-grid>
+	  <ion-row>
+	    <ion-col *ngIf="post.acf.asset_image1">
+	      <img  [src]="post.acf.asset_image1">
+	    </ion-col>
+	    <ion-col *ngIf="post.acf.asset_image2">
+	      <img  [src]="post.acf.asset_image2">
+	    </ion-col>
+	    <ion-col *ngIf="post.acf.asset_image3">
+	      <img  [src]="post.acf.asset_image3">
+	    </ion-col>
+	  </ion-row>
+	</ion-grid>
+
 	 <ion-card padding text-wrap *ngIf="post.content.rendered">
       <p [innerHtml]="post.content.rendered"></p>
-      <p><b>Worth:</b> {{post.acf.estimated_value }}</p>
+      <!-- <p><b>Worth:</b> {{post.acf.estimated_value }}</p> -->
       <p><b>Bequeathed to:</b> {{post.acf.asset_bequeathed_to }}</p>
     </ion-card>
 
