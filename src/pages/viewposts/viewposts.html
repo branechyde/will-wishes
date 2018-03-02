@@ -11,7 +11,7 @@
 </ion-header>
 
 <ion-content>
-  <ion-list >
+  <ion-list *ngIf="!noresults">
        <ion-item>
            <p><b>Client Name:</b> <span>{{Name}}</span></p>
        </ion-item>
@@ -41,6 +41,7 @@
       <p>{{post.content.rendered | trimHTML | truncate: 100 }}</p>
       <p>Bequeathed to: {{post.acf.asset_bequeathed_to }}</p>
     </button>
+
   <!-- problem is here-->
   <div padding *ngIf="noresults">
    <h3>Sorry no results found!</h3>

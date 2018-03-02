@@ -20,10 +20,9 @@ export class ViewPosts implements OnInit  {
 	search: string;
 	hideSearchbar: boolean;
 	favoritePosts: any;
-	public tagID : number;
-	slug : any;
-	noresults : any;
-
+	public tagID: number;
+	slug: any;
+	noresults: any;
 	Name: any;
   	Dob: any;
   	Preparedby: any;
@@ -50,15 +49,17 @@ export class ViewPosts implements OnInit  {
 		this.search = '';
 		this.favoritePosts = [];
 		this.search = this.navParams.get('search');
-        //Get posts tagged with slug
-		this.storage.get('session_id')
-	    .then((data) => {
-	      //if no search is entered use the store session id
+        //Get slug from session or input
+		this.storage.get('session_id').then((data) => {
+	      //if a search is entered 
 	      if (this.search != null) {
 	      	this.getTagID(this.search);
 	      } else {
+	      //if the session is not empty
 	      if (data != null) {
 	      	this.getTagID(data);
+	      } else {
+	      	this.noresults = 1;
 	      }
 	     }
 	      
@@ -67,15 +68,16 @@ export class ViewPosts implements OnInit  {
 
     //get the tagid of the tagname
 	getTagID(slug) {
-		this.wordpressService.getTagID(slug)
-		.subscribe(data => {
+		this.wordpressService.getTagID(slug).subscribe(data => {
 		// if a result is returned
          if (typeof data !== 'undefined' && data.length > 0) {
          this.tagID = data[0].id;
          this.getTaggedPosts(this.tagID);
          //save the current tag name, so if the portfolio is signed the correct tag is used to sign the signatures
          this.storage.set('session_id', slug);
-         } else { this.noresults = 1;}
+         } else { 
+         this.noresults = 1;
+         }
 		});
 	}
 	//Get only tagged post
