@@ -42,10 +42,6 @@ export class SinglePost {
 		this.wordpressService.getPost(id)
 		.subscribe(result => {
 			this.post = result;
-			//this.authorData = this.post["_embedded"].author[0];
-			//if(this.post["_embedded"].replies) {
-			 //	this.comments = this.post["_embedded"].replies[0];
-			//}
 		},
 		error => console.log(error),
     () => loader.dismiss());

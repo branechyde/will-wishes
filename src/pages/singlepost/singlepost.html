@@ -24,31 +24,19 @@
 
     <ion-grid>
 	  <ion-row>
-	    <ion-col *ngIf="post.asset_image1">
-	      <img  [src]="post.asset_image1">
+	    <ion-col *ngIf="post.acf.asset_image1 || post.asset_image1">
+	      <img  [src]="post.asset_image1!= null ? post.asset_image1 : post.acf.asset_image1">
 	    </ion-col>
-	    <ion-col *ngIf="post.asset_image2">
-	      <img  [src]="post.asset_image2">
+	    <ion-col *ngIf="post.acf.asset_image2 || post.asset_image2">
+	      <img  [src]="post.asset_image2!= null ? post.asset_image2 : post.acf.asset_image2">
 	    </ion-col>
-	    <ion-col *ngIf="post.asset_image3">
-	      <img  [src]="post.asset_image3">
+	   <ion-col *ngIf="post.acf.asset_image3 || post.asset_image3">
+	      <img  [src]="post.asset_image3!= null ? post.asset_image3 : post.acf.asset_image3">
 	    </ion-col>
 	  </ion-row>
 	</ion-grid>
 
-	<ion-grid>
-	  <ion-row>
-	    <ion-col *ngIf="post.acf.asset_image1">
-	      <img  [src]="post.acf.asset_image1">
-	    </ion-col>
-	    <ion-col *ngIf="post.acf.asset_image2">
-	      <img  [src]="post.acf.asset_image2">
-	    </ion-col>
-	    <ion-col *ngIf="post.acf.asset_image3">
-	      <img  [src]="post.acf.asset_image3">
-	    </ion-col>
-	  </ion-row>
-	</ion-grid>
+	
 
 	 <ion-card padding text-wrap *ngIf="post.content.rendered">
       <p [innerHtml]="post.content.rendered"></p>
