@@ -9,11 +9,11 @@
 
 <ion-content padding id="login">
   <form (submit)="login()">
-  <img src="assets/imgs/logo.png" class="center" width="120px" />
+  <img src="assets/img/logo.png" class="center" width="120px" />
 
   <ion-item *ngIf="success" >
       <h2>Account created, please login.</h2>
-      <img src="assets/imgs/success.png" />
+      <img src="assets/img/success.png" />
     </ion-item>
 
 <ion-list class="loginMargin">
@@ -29,7 +29,7 @@
       </ion-item>
 
       <div padding>
-        <button ion-button color="primary" full>{{ 'LOGIN' }}</button>
+        <button ion-button block color="primary" outline><ion-icon name="log-in"></ion-icon>&nbsp;{{ 'LOGIN' }}</button>
       </div>
 
     </ion-list>

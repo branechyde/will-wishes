@@ -38,11 +38,11 @@ export class MyApp {
     // used for an example of ngFor and navigation
     this.pages = [
       { title: 'Home', component: HomePage, index: 0,icon: 'home' },
-      { title: 'About', component: AboutPage, index: 1, icon: 'person' },
-      { title: 'Create Inventory', component: InventoryPage, index: 2, icon: 'bookmarks' },
-      { title: 'Manage Inventory', component: ViewPosts, index: 3, icon: 'list-box' },
-      { title: 'Settings', component: AboutPage, index: 4, icon: 'cog' },
-      { title: 'Contact', component: ContactPage, index: 5, icon: 'contact' },
+      //{ title: 'About', component: AboutPage, index: 1, icon: 'person' },
+      { title: 'Create Portfolio', component: InventoryPage, index: 2, icon: 'bookmarks' },
+      { title: 'Log Out', component: ViewPosts, index: 3, icon: 'person' },
+      //{ title: 'Settings', component: AboutPage, index: 4, icon: 'cog' },
+      //{ title: 'Contact', component: ContactPage, index: 5, icon: 'contact' },
      // { title: 'List Pages', component: ViewPages, index: 6, icon: 'plane' },
   
     ];
@@ -64,6 +64,7 @@ export class MyApp {
     this.nav.setRoot(page.component);
   }
   
+
   /* 
   isActive(page: PageInterface) {
     let childNav = this.nav.getActiveChildNav();

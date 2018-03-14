@@ -8,7 +8,7 @@
 </ion-header>
 
 <ion-content padding id="signup">
- <img src="assets/imgs/logo.png" class="center" width="120px" />
+ <img src="assets/img/logo.png" class="center" width="120px" />
 
        <p text-center *ngIf="data.response.errors " > Invalid email address  </p>
        <p text-center *ngIf="data.response.result == 'false'" > You have errors in your form.</p>
@@ -32,7 +32,7 @@
        <p *ngIf="data.response.password == ''" > Please enter a password  </p>
     </ion-item>
 
-     <button ion-button block color="secondary" class="loginbtn" (click)="signup()">Signup now</button>
+     <button ion-button block color="primary" class="loginbtn" (click)="signup()"><ion-icon name="contact"></ion-icon>&nbsp;Signup now</button>
   </ion-list>
 
 <!--
