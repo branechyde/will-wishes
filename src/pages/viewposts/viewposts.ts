@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NavController, NavParams, LoadingController, ToastController, ModalController } from 'ionic-angular';
 import { WordpressService } from '../services/wordpress.service';
 import { SinglePost } from '../singlepost/singlepost';
-import {SignaturePage} from '../signature/signature';
+import { SignaturePage} from '../signature/signature';
 import { Storage } from '@ionic/storage';
 import { HomePage} from '../home/home';
 
@@ -22,7 +22,6 @@ export class ViewPosts implements OnInit  {
 	favoritePosts: any;
 	public tagID: number;
 	slug: any;
-	noresults: any;
 	Name: any;
   	Dob: any;
   	Preparedby: any;
@@ -39,54 +38,62 @@ export class ViewPosts implements OnInit  {
 		public modalController:ModalController,
 		private storage: Storage,
 		) { }
-
+   
 	ngOnInit() {
 		this.category = this.navParams.get('category');
 		this.tag = this.navParams.get('tag');
 		this.author = this.navParams.get('author');
 		this.hideSearchbar = true;
-		//this.noresults = false;
 		this.search = '';
 		this.favoritePosts = [];
 		this.search = this.navParams.get('search');
-        //Get slug from session or input
-		this.storage.get('session_id').then((data) => {
-	      //if a search is entered 
-	      if (this.search != null) {
-	      	this.getTagID(this.search);
-	      } else {
-	      //if the session is not empty
-	      if (data != null) {
-	      	this.getTagID(data);
-	      } else {
-	      	this.noresults = 1;
-	      }
-	     }
-	      
-	    });
+        
 	}
 
-    //get the tagid of the tagname
+
+   ionViewWillEnter() {
+	let loader = this.loadingController.create({
+		content: "Please wait", duration: 1000
+	});
+	loader.present();
+	//Get slug from session or input
+	this.storage.get('session_id').then((data) => {
+      //if a search is entered 
+      if (this.search != null) {
+      	this.getTagID(this.search);
+      } else {
+      //if the session is not empty
+      if (data != null) {
+      	this.getTagID(data);
+      } 
+     }
+     loader.dismiss();
+    });
+  }
+ 
+
+    //Retrieve post by tagID
 	getTagID(slug) {
 		this.wordpressService.getTagID(slug).subscribe(data => {
 		// if a result is returned
          if (typeof data !== 'undefined' && data.length > 0) {
-         this.tagID = data[0].id;
-         this.getTaggedPosts(this.tagID);
-         //save the current tag name, so if the portfolio is signed the correct tag is used to sign the signatures
-         this.storage.set('session_id', slug);
+           this.tagID = data[0].id;
+           this.getTaggedPosts(this.tagID);
+           //save the current tag name, so if the portfolio is signed the correct tag is used to sign the signatures
+           this.storage.set('session_id', slug);
          } else { 
-         this.noresults = 1;
+            //run another search 
+			this.wordpressService.getPostsbyName(this.search).subscribe(result => {
+			 if (typeof result !== 'undefined' && result.length > 0) {
+	           this.getTaggedPosts( result[0].id);
+	           this.storage.set('session_id', result[0].slug);
+	          } 
+			});
          }
 		});
 	}
 	//Get only tagged post
 	getTaggedPosts(tagID) {
-		let loader = this.loadingController.create({
-			content: "Please wait",
-        duration: 500
-		});
-		loader.present();
 		this.wordpressService.getPostsbytag(tagID)
 		.subscribe(result => {
 			this.posts = result;
@@ -96,16 +103,16 @@ export class ViewPosts implements OnInit  {
 			this.Address = result[0].acf.address;
 			this.City = result[0].acf.city;
 			this.Postcode = result[0].acf.postcode;
-			loader.dismiss();
 		});
 	}
+   
 
+   //Delete this
 	getPosts() {
 		this.pageCount = 1;
 		let query = this.createQuery();
 		let loader = this.loadingController.create({
-			content: "Please wait",
-      duration: 500
+			content: "Please wait", duration: 500
 		});
 		loader.present();
 		this.wordpressService.getPosts(query)
@@ -114,43 +121,30 @@ export class ViewPosts implements OnInit  {
 			loader.dismiss();
 		});
 	}
-
+    //delete this as it no longer used
 	searchPosts() {
     	this.getPosts();
 	}
-
-	loadMore(infiniteScroll) {
-		this.pageCount++;
-		let query = this.createQuery();
-	  	let loader = this.loadingController.create({
-			content: "Please wait"
-		});
-		let toast = this.toastController.create({
-			message: "There are no more posts.",
-      duration: 2000
-		});
-
-		loader.present();
-		this.wordpressService.getPosts(query)
-		.subscribe(result => {
-			infiniteScroll.complete();
-			if(result.length < 1) { 
-				infiniteScroll.enable(false);
-				toast.present();
-			} else {
-				this.posts = this.posts.concat(result);
-			}
-		},
-		error => console.log(error),() => loader.dismiss());
-	}
-
+    
+    //Display a single post
 	loadPost(post) {
-		this.navController.push(SinglePost, {
-			post: post
-		});
+		this.navController.push(SinglePost, { post: post });
 	}
 
-	createQuery() {
+	backHome() {
+		//remove the session id
+		//this.storage.remove('session_id');
+		this.navController.push(HomePage);
+	}
+   
+   //open signature pad
+   openSignatureModel(){
+    setTimeout(() => {
+    let modal = this.modalController.create(SignaturePage);
+    modal.present(); }, 300);
+   }
+
+   createQuery() {
 	let query = {};
 	query['page'] = this.pageCount;
 	if(this.search) {
@@ -166,19 +160,6 @@ export class ViewPosts implements OnInit  {
 		query['author'] = this.author;
 	}
 	return query;
-	}
-
-	backHome() {
-		//remove the session id
-		//this.storage.remove('session_id');
-		this.navController.push(HomePage);
-	}
-   
-   //open signature pad
-   openSignatureModel(){
-    setTimeout(() => {
-       let modal = this.modalController.create(SignaturePage);
-    modal.present();
-    }, 300);
    }
+
 }

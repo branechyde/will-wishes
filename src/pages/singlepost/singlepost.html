@@ -19,7 +19,7 @@
             <h1 [innerHTML]="post.title.rendered"></h1>
             <h4>{{post.date | date: 'fullDate'}}</h4> 
         </ion-item>
-        <img *ngIf="post.featured_media" [id]="post.featured_media" [src]="post.featured_image" (click)="loadPost(post)">
+        <img *ngIf="post.featured_media" [id]="post.featured_media" [src]="post.featured_image" >
     </ion-item>
 
     <ion-grid>
@@ -36,15 +36,10 @@
 	  </ion-row>
 	</ion-grid>
 
-	
-
-	 <ion-card padding text-wrap *ngIf="post.content.rendered">
+	 <ion-card class="bottom" padding text-wrap *ngIf="post.content.rendered">
       <p [innerHtml]="post.content.rendered"></p>
-      <!-- <p><b>Worth:</b> {{post.acf.estimated_value }}</p> -->
       <p><b>Bequeathed to:</b> {{post.acf.asset_bequeathed_to }}</p>
     </ion-card>
-
-	
 <!--
 	<ion-list *ngIf="comments">
 	  <ion-item-divider light>Comments</ion-item-divider>
@@ -57,4 +52,12 @@
 	  </ion-item>
 	</ion-list> -->
   </ion-list>
+
+   <ion-fab left bottom #fab4>
+    <button ion-fab color="dark" (click)="editAsset(post)"> <ion-icon ios="ios-create" md="md-create"></ion-icon>&nbsp;Edit</button>
+ </ion-fab>
+
+ <ion-fab right bottom #fab2>
+    <button ion-fab color="light" (click)="cloneAsset()"><ion-icon ios="ios-copy" md="md-copy"></ion-icon>&nbsp;Clone</button>
+  </ion-fab>
 </ion-content>

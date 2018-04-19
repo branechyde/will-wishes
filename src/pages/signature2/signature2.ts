@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { NavController,  IonicPage,  App, NavParams, LoadingController, ToastController } from 'ionic-angular';
+import { NavController,  App, NavParams, LoadingController, ToastController } from 'ionic-angular';
 import {SignaturePad} from 'angular2-signaturepad/signature-pad';
 import {SignaturePage} from '../signature/signature';
 import {HomePage} from '../home/home';

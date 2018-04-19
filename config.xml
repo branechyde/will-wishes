@@ -118,5 +118,4 @@
         <variable name="CHANNEL_NAME" value="Master" />
         <variable name="UPDATE_METHOD" value="background" />
     </plugin>
-   
 </widget>

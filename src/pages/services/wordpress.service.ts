@@ -26,7 +26,16 @@ export class WordpressService {
 			return result.json();
 		});    
 	}
-
+  
+  //Get all posts
+	public getPostsbyName(name) {
+		let url = this.wordpressApiUrl + `/chenko/v2/my_meta_query?meta_query[0][key]=client_name&meta_query[0][value]=${name}`;
+		return this.http.get(url)
+	  	.map(result => {
+			return result.json();
+		});    
+	}
+	//get post by query
 	public getPosts(query) {
 		query = this.transformRequest(query);
 		let url = this.wordpressApiUrl + `/wp/v2/posts?${query}&_embed`;
@@ -51,7 +60,7 @@ export class WordpressService {
 			return result.json();
 	  });    
    }
-
+   //get a single post
 	public getPost(id) {
 		return this.http.get(this.wordpressApiUrl + `/wp/v2/posts/${id}?_embed`)
 	  	.map(result => {

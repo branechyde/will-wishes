@@ -12,6 +12,7 @@ import { ContactPage } from '../pages/contact/contact';
 import { SinglePage } from '../pages/singlepage/singlepage';
 import { ViewPosts } from '../pages/viewposts/viewposts';
 import { SinglePost } from '../pages/singlepost/singlepost';
+import { editAsset } from '../pages/editasset/editasset';
 
 
 

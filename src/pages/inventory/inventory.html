@@ -17,17 +17,17 @@
 
             <ion-item>
                <ion-label stacked >Client Name</ion-label>
-              <ion-input type="text" name="name" [(ngModel)]="data.name" ></ion-input>
+              <ion-input type="text" name="name" required [(ngModel)]="data.name" ></ion-input>
            </ion-item>
 
             <ion-item>
             <ion-label stacked color="primary">Date of Birth</ion-label>
-            <ion-input  type="text" name="dob" [(ngModel)]="data.dob" ></ion-input>
+            <ion-input  type="text" name="dob" required [(ngModel)]="data.dob" ></ion-input>
           </ion-item>
 
             <ion-item>
                <ion-label stacked >Prepared By</ion-label>
-              <ion-input type="text" name="preparedby" [(ngModel)]="data.preparedby"></ion-input>
+              <ion-input type="text" name="preparedby" required [(ngModel)]="data.preparedby"></ion-input>
            </ion-item>
 
            <ion-item>

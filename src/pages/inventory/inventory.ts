@@ -18,6 +18,7 @@ export class InventoryPage {
   public wordpressUrl = 'http://willwishes.uk';
 	public random: number;
   posts: any;
+  post: any;
   pages: any;
   //public wordpressApiUrl = 'http://trendigadgets.com';
   //upload image
@@ -47,6 +48,8 @@ export class InventoryPage {
 
   signatureImage : any;
   user: any;
+  clone: any;
+
 
   constructor(
     public navCtrl: NavController, 
@@ -61,6 +64,46 @@ export class InventoryPage {
     private transfer: FileTransfer,
     public loadingCtrl: LoadingController,
     public toastCtrl: ToastController) {
+    //get clone parameter
+    if (navParams.get('clone')) {
+      this.clone = navParams.get('clone');
+    }
+    //get post object
+    if (navParams.get('post')) {
+      this.post = navParams.get('post');
+    }
+      //Clone Portfolio
+      if (this.clone == 1) {
+        this.data.uid = '';
+        this.data.slug = this.post.tags[0];
+        this.data.name = this.post.acf.client_name;
+        this.data.preparedby = this.post.acf.prepared_by;
+        this.data.address = this.post.acf.address;
+        this.data.city = this.post.acf.city;
+        this.data.postcode = this.post.acf.postcode;
+        this.data.assetname = this.post.title.rendered;
+        this.data.description = this.post.acf.description;
+        this.data.dob = this.post.acf.date_of_birth;
+        this.data.bequeathedto = this.post.acf.asset_bequeathed_to;
+        this.data.response = '';
+        this.data.filename = '';
+       //Clone asset, generate new slug or id
+      } else if (this.clone == 2) {
+        this.data.uid = '';
+        this.data.slug = '';
+        this.data.name = '';
+        this.data.dob = '';
+        this.data.preparedby = '';
+        this.data.address = '';
+        this.data.city = '';
+        this.data.postcode = '';
+        this.data.assetname = this.post.title.rendered;
+        this.data.description = this.post.acf.description;
+        this.data.bequeathedto = this.post.acf.asset_bequeathed_to;
+        this.data.response = '';
+        this.data.filename = '';
+      //No clone
+      } else {
         this.data.uid = '';
         this.data.slug = '';
         this.data.name = '';
@@ -74,6 +117,7 @@ export class InventoryPage {
         this.data.bequeathedto = '';
         this.data.response = '';
         this.data.filename = '';
+      }
     /**
      * Step Wizard Settings
      */
@@ -120,8 +164,6 @@ export class InventoryPage {
     this.images = [];
     this.photos = [];
     this.filenames = [];
-    //this.getPages();
-    //this.getData();
     this.getID();
     //get the tagid of the tagname
     //this.getTagID('E170444018962530');
@@ -175,6 +217,7 @@ export class InventoryPage {
 
 
   getStep1() {
+  	//Get form data from storage if it is set
     this.storage.get('name').then((data) => {
       this.Name = data;
       if (this.Name != null) {
@@ -203,12 +246,13 @@ export class InventoryPage {
   sendData() {
   	this.getStep1();
     var link = this.wordpressUrl + '/api.php';
+    var myData = '';
     if (this.Readonly) {
-    	var myData = JSON.stringify({uid: this.data.uid, slug: this.data.slug, name: this.Name, preparedby: this.Preparedby, 
+    	myData = JSON.stringify({uid: this.data.uid, slug: this.data.slug, name: this.Name, preparedby: this.Preparedby, 
     	                         assetname: this.data.assetname, description: this.data.description, address: this.Address, 
                                 city: this.City, postcode: this.Postcode, dob: this.Dob, bequeathedto: this.data.bequeathedto});
     } else {
-       var myData = JSON.stringify({uid: this.data.uid, slug: this.data.slug, name: this.data.name, preparedby: this.data.preparedby, 
+      myData = JSON.stringify({uid: this.data.uid, slug: this.data.slug, name: this.data.name, preparedby: this.data.preparedby, 
     	                         assetname: this.data.assetname, description: this.data.description, address: this.data.address, 
                                 city: this.data.city, postcode: this.data.postcode, dob: this.data.dob, bequeathedto: this.data.bequeathedto});
     }

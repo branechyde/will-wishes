@@ -1,0 +1,127 @@
+<ion-header>
+	<ion-navbar>
+		<button menuToggle>
+			<ion-icon name="menu"></ion-icon>
+		</button>
+		<ion-title *ngIf="post"> Edit {{post.title.rendered}}</ion-title>
+	</ion-navbar>
+</ion-header>
+
+<ion-content class="post">
+
+<p text-center>Enter client details</p>
+  
+  <form #form="ngForm" novalidate>
+  <ion-list>
+	    <ion-item>
+	       <ion-label stacked >Client Name</ion-label>
+	      <ion-input type="text" name="name" required [(ngModel)]="data.name" [disabled]="!edit" ></ion-input>
+	   </ion-item>
+
+	    <ion-item>
+	    <ion-label stacked color="primary">Date of Birth</ion-label>
+	    <ion-input  type="text" name="dob" required [(ngModel)]="data.dob" [disabled]="!edit" ></ion-input>
+	  </ion-item>
+
+	    <ion-item>
+	       <ion-label stacked >Prepared By</ion-label>
+	      <ion-input type="text" name="preparedby" required [(ngModel)]="data.preparedby" [disabled]="!edit"></ion-input>
+	   </ion-item>
+
+	   <ion-item>
+	     <ion-label stacked >Address</ion-label>
+	      <ion-input type="text" name="address" [(ngModel)]="data.address" [disabled]="!edit"></ion-input>
+	    </ion-item>
+
+		<ion-item>
+		  <ion-label stacked color="primary">City</ion-label>
+		  <ion-input  type="text" placeholder="Your city" name="city" [(ngModel)]="data.city" [disabled]="!edit" ></ion-input>
+		</ion-item>
+
+		<ion-item>
+		  <ion-label stacked color="primary">Postcode</ion-label>
+		  <ion-input  type="text" placeholder="i.e. SW1 4AD" name="postcode" [(ngModel)]="data.postcode" [disabled]="!edit"></ion-input>
+		</ion-item>
+		<div padding>
+         <button ion-button color="primary" (click)="onClicked(!edit)">{{edit? "save" : "edit"}} Client info</button>
+        </div>
+
+		<ion-item>
+	       <ion-label stacked >Asset Name</ion-label>
+	      <ion-input type="text" name="assetname" [(ngModel)]="data.assetname" ></ion-input>
+	   </ion-item>
+
+	    <ion-item>
+	    <ion-label stacked >Description</ion-label>
+	    <ion-textarea name="description" [(ngModel)]="data.description" ></ion-textarea>
+	  </ion-item>
+
+	  <ion-item>
+	    <ion-label stacked color="primary">Bequeathed To</ion-label>
+	    <ion-input  type="text" placeholder="Who is this to be left to" name="other" [(ngModel)]="data.bequeathedto" ></ion-input>
+	  </ion-item>
+
+</ion-list>
+</form>
+
+<p text-center>You can add up to 4 Photos of your Asset</p>
+
+<ion-grid id="image-canvas">
+  <ion-row>
+	<ion-col col-6 class="no-padding">
+	<button ion-button color="secondary" (click)="chooseMedia(0)" ><ion-icon name="camera"></ion-icon>&nbsp;Upload</button>
+	<div *ngIf="featuredImage">
+	<a *ngIf="showDelete" href="#" class="btn" (click)="deletePhoto(0)"><ion-icon name="trash" class="deleteIcon"></ion-icon>Delete</a>
+	<img [src]="featuredImage" (click)="toggle()">
+	</div>
+	</ion-col>
+
+	<ion-col col-6 class="no-padding">
+	<button ion-button color="secondary" (click)="chooseMedia(1)" ><ion-icon name="camera"></ion-icon>&nbsp;Upload</button>
+	<div *ngIf="assetImage1">
+	<a *ngIf="showDelete" href="#" class="btn" (click)="deletePhoto(1)"><ion-icon name="trash" class="deleteIcon"></ion-icon>Delete</a>
+	<img [src]="assetImage1" (click)="toggle()">
+	</div>
+	</ion-col>
+
+	<ion-col col-6 class="no-padding">
+	<button ion-button color="secondary" (click)="chooseMedia(2)" ><ion-icon name="camera"></ion-icon>&nbsp;Upload</button>
+	<div *ngIf="assetImage2">
+	<a *ngIf="showDelete" href="#" class="btn" (click)="deletePhoto(2)"><ion-icon name="trash" class="deleteIcon"></ion-icon>Delete</a>
+	<img [src]="assetImage2" (click)="toggle()">
+    </div>
+	</ion-col>
+
+	<ion-col col-6 class="no-padding">
+	<button ion-button color="secondary" (click)="chooseMedia(3)" ><ion-icon name="camera"></ion-icon>&nbsp;Upload</button>
+	 <div *ngIf="assetImage3">
+	 <a *ngIf="showDelete" href="#" class="btn" (click)="deletePhoto(3)"><ion-icon name="trash" class="deleteIcon"></ion-icon>Delete</a>
+	 <img [src]="assetImage3" (click)="toggle()">
+    </div>
+	</ion-col>
+  </ion-row>
+</ion-grid>
+
+<!--
+<ion-card>
+    <ion-card-header>
+      Response
+    </ion-card-header>
+    <ion-card-content>
+      <b>{{data.response}}</b>
+    </ion-card-content>
+  </ion-card>
+
+ <ion-fab left bottom #fab4>
+    <button ion-fab color="dark" (click)="cancelEdit(post)"> <ion-icon ios="ios-close-circle" md="md-close-circle"></ion-icon>&nbsp;Back</button>
+ </ion-fab>
+-->
+
+ <ion-fab right bottom #fab2>
+    <button ion-fab color="light" (click)="saveEdit(post)"><ion-icon ios="ios-document" md="md-document"></ion-icon>&nbsp;Save</button>
+  </ion-fab>
+
+
+
+
+</ion-content>

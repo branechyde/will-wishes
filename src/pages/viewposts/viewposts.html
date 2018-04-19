@@ -11,7 +11,7 @@
 </ion-header>
 
 <ion-content>
-  <ion-list *ngIf="!noresults">
+  <ion-list *ngIf="Name">
        <ion-item>
            <p><b>Client Name:</b> <span>{{Name}}</span></p>
        </ion-item>
@@ -36,21 +36,21 @@
       <ion-thumbnail item-start>
         <img *ngIf="post.featured_media" [id]="post.featured_media" [src]="post.featured_image" (click)="loadPost(post)">
       </ion-thumbnail>
-      <p class="date">{{post.date | date: 'fullDate'}}</p>
+      <p class="date">{{post.date | date: 'fullDate'}} <ion-icon name="edit"></ion-icon>&nbsp;Edit  <ion-icon name="copy"></ion-icon>&nbsp;Clone</p>
       <h2 [innerHTML]="post.title.rendered"></h2>
       <p>{{post.content.rendered | trimHTML | truncate: 100 }}</p>
       <p>Bequeathed to: {{post.acf.asset_bequeathed_to }}</p>
     </button>
 
   <!-- problem is here-->
-  <div padding *ngIf="noresults">
+  <div padding *ngIf="!Name">
    <h3>Sorry no results found!</h3>
    <p>Please refine your search and try again</p>
  </div>
 
   <ion-grid>
   <ion-row>
-    <ion-col col-8 *ngIf="!noresults">
+    <ion-col col-8 *ngIf="Name">
       <button ion-button full color="primary" (click)="openSignatureModel()">Sign Portfolio</button>
     </ion-col>
     <ion-col col-4>
