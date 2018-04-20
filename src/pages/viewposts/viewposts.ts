@@ -5,6 +5,7 @@ import { SinglePost } from '../singlepost/singlepost';
 import { SignaturePage} from '../signature/signature';
 import { Storage } from '@ionic/storage';
 import { HomePage} from '../home/home';
+import { InventoryPage } from '../inventory/inventory';
 
 @Component({
   selector: 'page-viewposts',
@@ -17,6 +18,7 @@ export class ViewPosts implements OnInit  {
 	category: any;
 	tag: any;
 	author: any;
+	noresults : any;
 	search: string;
 	hideSearchbar: boolean;
 	favoritePosts: any;
@@ -87,12 +89,12 @@ export class ViewPosts implements OnInit  {
 			 if (typeof result !== 'undefined' && result.length > 0) {
 	           this.getTaggedPosts( result[0].id);
 	           this.storage.set('session_id', result[0].slug);
-	          } 
+	          } else { this.noresults = 1;}
 			});
          }
 		});
 	}
-	//Get only tagged post
+	//Get only tagged post - SHOULD WE DELETE THIS
 	getTaggedPosts(tagID) {
 		this.wordpressService.getPostsbytag(tagID)
 		.subscribe(result => {
@@ -136,6 +138,11 @@ export class ViewPosts implements OnInit  {
 		//this.storage.remove('session_id');
 		this.navController.push(HomePage);
 	}
+
+	addAssets(post) {
+    //take us to inventory page
+    this.navController.push(InventoryPage, { post: post, clone: 3 });
+   }
    
    //open signature pad
    openSignatureModel(){

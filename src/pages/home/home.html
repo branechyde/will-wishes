@@ -11,7 +11,7 @@
     <h2 *ngIf="!signatureImage" >What do you want to do?</h2>
 
     <ion-item *ngIf="signatureImage" >
-      <h2>Thanks the Portfolio has been saved.</h2>
+      <h2>Thanks your Portfolio has been saved.</h2>
       <!-- <img src="assets/imgs/success.png" with="40" /> -->
   </ion-item>
 
@@ -25,11 +25,15 @@
     <ion-col col-6 *ngIf="user">
       <button ion-button full color="light" (click)="logout()">Sign Out</button> 
     </ion-col>
--->
+
 
     <ion-col *ngIf="assetbtn">
       <button ion-button full color="light" (click)="addAssets()">Add Assets</button> 
     </ion-col>
+
+  -->
+
+
    </ion-row>
    <ion-row>
 

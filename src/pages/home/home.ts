@@ -24,13 +24,12 @@ export class HomePage {
     public navCtrl: NavController) {
     this.user = navParams.get('user');
     this.signatureImage = navParams.get('signatureImage');
-    this.getName();
+    this.showAssetBtn();
   }
   
-  //Get client name
-  getName() {
-    this.storage.get('name')
-    .then((data) => {
+  //Show Add Asset button if form data was stored
+  showAssetBtn() {
+    this.storage.get('name').then((data) => {
       //if client name is set
       if (data != null) {
         this.assetbtn = true;
@@ -39,7 +38,7 @@ export class HomePage {
       }
     });
   }
-  
+  //create new inventory
   createPortfolio() {
     //Remove stored variables
     this.storage.remove('session_id');
@@ -48,6 +47,7 @@ export class HomePage {
     this.storage.remove('preparedby');
     this.storage.remove('address');
     this.storage.remove('city');
+    this.storage.remove('postcode');
     //take us to inventory page
     this.navCtrl.push(InventoryPage);
   }

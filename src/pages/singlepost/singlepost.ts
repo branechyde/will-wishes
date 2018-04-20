@@ -70,16 +70,16 @@ export class SinglePost {
   //Clone Portfolio/Asset
   cloneAsset() {
   let actionSheet = this.alertCtrl.create({
-      title: 'Clone What?',
+      title: 'Clone into where?',
       buttons: [
         {
-          text: 'Portfolio',
+          text: 'New Portfolio',
           handler: () => {
     		this.navCtrl.push(InventoryPage, { post: this.post, clone: 1 });
           }
         },
         {
-          text: 'Asset',
+          text: 'Current Portfolio',
           handler: () => {
     		this.navCtrl.push(InventoryPage, { post: this.post, clone: 2 });
           }

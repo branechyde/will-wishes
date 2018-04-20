@@ -36,27 +36,36 @@
       <ion-thumbnail item-start>
         <img *ngIf="post.featured_media" [id]="post.featured_media" [src]="post.featured_image" (click)="loadPost(post)">
       </ion-thumbnail>
-      <p class="date">{{post.date | date: 'fullDate'}} <ion-icon name="edit"></ion-icon>&nbsp;Edit  <ion-icon name="copy"></ion-icon>&nbsp;Clone</p>
+      <p class="date"><ion-icon ios="ios-create" md="md-create"></ion-icon>&nbsp;Edit Entry | <ion-icon name="copy"></ion-icon>&nbsp;Clone Entry</p>
       <h2 [innerHTML]="post.title.rendered"></h2>
       <p>{{post.content.rendered | trimHTML | truncate: 100 }}</p>
       <p>Bequeathed to: {{post.acf.asset_bequeathed_to }}</p>
     </button>
 
-  <!-- problem is here-->
-  <div padding *ngIf="!Name">
+  <!-- Show no results -->
+  <div padding *ngIf="noresults">
    <h3>Sorry no results found!</h3>
    <p>Please refine your search and try again</p>
  </div>
 
   <ion-grid>
   <ion-row>
-    <ion-col col-8 *ngIf="Name">
-      <button ion-button full color="primary" (click)="openSignatureModel()">Sign Portfolio</button>
+    <ion-col col-6>
+      <button ion-button full color="primary" (click)="openSignatureModel()"><ion-icon ios="ios-briefcase" md="md-briefcase"></ion-icon>&nbsp;New Portfolio</button>
     </ion-col>
-    <ion-col col-4>
-      <button ion-button full color="light" (click)="backHome()"><ion-icon ios="ios-arrow-back" md="md-arrow-back"></ion-icon>&nbsp; Back</button> 
+     <ion-col col-6 *ngIf="Name">
+      <button ion-button full color="light" (click)="addAssets(posts[0])"><ion-icon ios="ios-add" md="md-add"></ion-icon>&nbsp; Add Asset</button> 
     </ion-col>
+    <ion-col col-6>
+      <button ion-button full color="light" (click)="backHome()"> <ion-icon ios="ios-arrow-back" md="md-arrow-back"></ion-icon>&nbsp;Back</button>
+    </ion-col>
+    <!-- only show the signature option if we have a result -->
+     <ion-col col-6 *ngIf="Name">
+      <button ion-button full color="dark" (click)="openSignatureModel()"><ion-icon ios="ios-color-filter" md="md-color-filter"></ion-icon>&nbsp;Sign Portfolio</button>
+    </ion-col>
+
   </ion-row>
 </ion-grid>
+
 
 </ion-content>

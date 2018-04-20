@@ -39,17 +39,11 @@ export class InventoryPage {
   currentStep: any;
   showDelete: any;
   Readonly: boolean;
-  Name: any;
-  Dob: any;
-  Preparedby: any;
-  Address: any;
-  City: any;
-  Postcode: any;
-
   signatureImage : any;
   user: any;
   clone: any;
-
+  title: any;
+  public n: number = 1;
 
   constructor(
     public navCtrl: NavController, 
@@ -64,60 +58,25 @@ export class InventoryPage {
     private transfer: FileTransfer,
     public loadingCtrl: LoadingController,
     public toastCtrl: ToastController) {
-    //get clone parameter
-    if (navParams.get('clone')) {
+      //get clone parameter
       this.clone = navParams.get('clone');
-    }
-    //get post object
-    if (navParams.get('post')) {
+      //get post object
       this.post = navParams.get('post');
-    }
-      //Clone Portfolio
-      if (this.clone == 1) {
-        this.data.uid = '';
-        this.data.slug = this.post.tags[0];
-        this.data.name = this.post.acf.client_name;
-        this.data.preparedby = this.post.acf.prepared_by;
-        this.data.address = this.post.acf.address;
-        this.data.city = this.post.acf.city;
-        this.data.postcode = this.post.acf.postcode;
-        this.data.assetname = this.post.title.rendered;
-        this.data.description = this.post.acf.description;
-        this.data.dob = this.post.acf.date_of_birth;
-        this.data.bequeathedto = this.post.acf.asset_bequeathed_to;
-        this.data.response = '';
-        this.data.filename = '';
-       //Clone asset, generate new slug or id
-      } else if (this.clone == 2) {
-        this.data.uid = '';
-        this.data.slug = '';
-        this.data.name = '';
-        this.data.dob = '';
-        this.data.preparedby = '';
-        this.data.address = '';
-        this.data.city = '';
-        this.data.postcode = '';
-        this.data.assetname = this.post.title.rendered;
-        this.data.description = this.post.acf.description;
-        this.data.bequeathedto = this.post.acf.asset_bequeathed_to;
-        this.data.response = '';
-        this.data.filename = '';
-      //No clone
-      } else {
-        this.data.uid = '';
-        this.data.slug = '';
-        this.data.name = '';
-        this.data.preparedby = '';
-        this.data.address = '';
-        this.data.city = '';
-        this.data.postcode = '';
-        this.data.assetname = '';
-        this.data.description = '';
-        this.data.dob = '';
-        this.data.bequeathedto = '';
-        this.data.response = '';
-        this.data.filename = '';
-      }
+
+      this.data.uid = '';
+      this.data.slug = '';
+      this.data.name = '';
+      this.data.preparedby = '';
+      this.data.address = '';
+      this.data.city = '';
+      this.data.postcode = '';
+      this.data.assetname = '';
+      this.data.description = '';
+      this.data.dob = '';
+      this.data.bequeathedto = '';
+      this.data.response = '';
+      this.data.filename = '';
+      
     /**
      * Step Wizard Settings
      */
@@ -159,33 +118,88 @@ export class InventoryPage {
     } 
   }
  
-
+  //used to be ngOnInit() 
   ngOnInit() {
     this.images = [];
     this.photos = [];
     this.filenames = [];
     this.getID();
-    //get the tagid of the tagname
-    //this.getTagID('E170444018962530');
-    this.getStep1();  
+    
+    if (!this.clone) { 
+     this.getStoreData(); 
+     this.title = 'Create';
+    } else {
+      if (this.clone == 3) {
+       this.title = 'Add to';
+      } else {
+        this.title = 'Clone';
+      }
+    }
   }
 
-  // Get session id if exist
+  // Get tag if exist or generate a new one
   getID() {
-    this.storage.get('session_id')
-    .then((data) => {
+   if (this.clone == 1) { //clone new portfolio
+        this.session = this.generateRandomValue(200000, 1000000);
+        //this.storage.set('session_id', this.session);
+        //Set the tag for sending
+        this.data.slug = this.session;
+        this.data.name = this.post.acf.client_name;
+        this.data.dob = this.post.acf.date_of_birth;
+        this.data.preparedby = this.post.acf.prepared_by;
+        this.data.address = this.post.acf.address;
+        this.data.city = this.post.acf.city;
+        this.data.postcode = this.post.acf.postcode;
+        this.data.assetname = this.post.title.rendered;
+        this.data.description = this.post.acf.description;
+        this.data.bequeathedto = this.post.acf.asset_bequeathed_to;
+
+    } else if (this.clone == 2) { //clone into current portfolio/ client fields will be disabled
+        //save cloned tag
+        //this.storage.set('session_id', this.post.tags[0]);
+        this.Readonly = true; 
+        this.data.slug = this.post.tags[0];
+        //Set other cloned variables
+        this.data.name = this.post.acf.client_name;
+        this.data.dob = this.post.acf.date_of_birth;
+        this.data.preparedby = this.post.acf.prepared_by;
+        this.data.address = this.post.acf.address;
+        this.data.city = this.post.acf.city;
+        this.data.postcode = this.post.acf.postcode;
+        this.data.assetname = this.post.title.rendered;
+        this.data.description = this.post.acf.description;
+        this.data.bequeathedto = this.post.acf.asset_bequeathed_to;
+
+     } else if (this.clone == 3) { //Add Asset to existing portfolio/ client fields will be disabled
+        this.Readonly = true; 
+        this.data.slug = this.post.tags[0];
+        //Set other cloned variables
+        this.data.name = this.post.acf.client_name;
+        this.data.preparedby = this.post.acf.prepared_by;
+        this.data.address = this.post.acf.address;
+        this.data.city = this.post.acf.city;
+        this.data.postcode = this.post.acf.postcode;
+        this.data.dob = this.post.acf.date_of_birth;
+
+    } else {
+      //If there is saved tag, get it else generate a new one
+      this.storage.get('session_id').then((data) => {
       this.session = data;
       //if session is null, create a new one
       if (this.session == null) {
         this.session = this.generateRandomValue(200000, 1000000);
         this.storage.set('session_id', this.session);
       } 
+      //Set the tag for sending
       this.data.slug = this.session;
-    });
+     });
+
+    }
   }
 
   /**
    * What happens when finish button is pressed
+   * Create the form with real form and set field to disabled
    */
   onFinish() {
   	if (this.Readonly == false) {
@@ -196,15 +210,20 @@ export class InventoryPage {
     this.storage.set('city', this.data.city);
     this.storage.set('postcode', this.data.postcode);
     }
-     //send the form data
+    //send the form data
     this.sendData();
+    if (this.clone == 1) { 
+      //Remove current tag id
+     this.storage.remove('session_id');
+     //SET VALUE TO RETURN NO RESULTS FOR SEARCH
+
+    }
+
     //Pass data and switch to homepage
     this.gotoHomepage();
-    //this.navCtrl.setRoot(ViewPosts, {tagID: this.tagID});
-    //this.navCtrl.insert(0,HomePage);
-    //this.navCtrl.popToRoot();
   }
   
+  //Goto homepage after sending the data
   gotoHomepage() {
       this.storage.get('wordpress.user')
       .then(data => {
@@ -214,57 +233,56 @@ export class InventoryPage {
           }
       });
   }
+  
 
-
-  getStep1() {
+  //Store form data
+  getStoreData() {
   	//Get form data from storage if it is set
     this.storage.get('name').then((data) => {
-      this.Name = data;
-      if (this.Name != null) {
+      this.data.name = data;
+      if (this.data.name != null) {
        this.Readonly = true;    
       } else {
        this.Readonly = false; 
       }
     });
+
     this.storage.get('dob').then((data) => {
-      this.Dob = data;
+      this.data.dob = data;
     });
     this.storage.get('preparedby').then((data) => {
-      this.Preparedby = data;
+      this.data.preparedby = data;
     });
     this.storage.get('address').then((data) => {
-      this.Address = data;
+      this.data.address = data;
     });
     this.storage.get('city').then((data) => {
-      this.City = data;
+      this.data.city = data;
     });
     this.storage.get('postcode').then((data) => {
-      this.Postcode = data;
+      this.data.postcode = data;
     });
   }
 
+
+  //Send form data
   sendData() {
-  	this.getStep1();
+  	this.getStoreData();
     var link = this.wordpressUrl + '/api.php';
-    var myData = '';
-    if (this.Readonly) {
-    	myData = JSON.stringify({uid: this.data.uid, slug: this.data.slug, name: this.Name, preparedby: this.Preparedby, 
-    	                         assetname: this.data.assetname, description: this.data.description, address: this.Address, 
-                                city: this.City, postcode: this.Postcode, dob: this.Dob, bequeathedto: this.data.bequeathedto});
-    } else {
-      myData = JSON.stringify({uid: this.data.uid, slug: this.data.slug, name: this.data.name, preparedby: this.data.preparedby, 
+    var formData = '';
+    formData = JSON.stringify({uid: this.data.uid, slug: this.data.slug, name: this.data.name, preparedby: this.data.preparedby, 
     	                         assetname: this.data.assetname, description: this.data.description, address: this.data.address, 
                                 city: this.data.city, postcode: this.data.postcode, dob: this.data.dob, bequeathedto: this.data.bequeathedto});
-    }
-    this.http.post(link, myData)
-    .subscribe(data => {
-      this.data.response = data["_body"]; //retrieve tag id here and pass it to next page ts
+    
+    this.http.post(link, formData).subscribe(data => {
+      //this.data.response = data["_body"]; 
+      console.log("Data submitted");
     }, error => {
         console.log("Oooops!");
     });
   }
   
-
+  /* Delete Photos */
   deletePhoto(index) {
     let confirm = this.alertCtrl.create({
       title: "Sure you want to delete this photo? There is NO undo!",
@@ -293,7 +311,7 @@ export class InventoryPage {
             .subscribe(data => {
               loader.dismiss();
               this.presentToast("Image deleted.");
-              this.data.response = data["_body"]; 
+              //this.data.response = data["_body"]; 
                //remove filename from array if successful
               this.filenames.splice(index, 1);
               this.photos.splice(index, 1);
@@ -337,7 +355,8 @@ chooseMedia() {
     });
     actionSheet.present();
   }
-
+ 
+ // Take photos
   public takePicture(sourceType) {
     // Create options for the Camera Dialog
     var options = {
@@ -361,17 +380,18 @@ chooseMedia() {
         this.uploadFile();
       },
       err => {
-        console.log(err);
         this.presentToast(err);
       }
     );
   }
   
- //upload file
+ //upload photo
  uploadFile() {
-   let random = this.generateRandomValue(27, 2);
-   this.uid = 2; //tagname
-  let Filename = this.uid+'_'+random + 'ion.jpg'
+   this.n += 1;
+   //Generate a Tag
+   //let random = this.generateRandomValue(27, 2);
+   this.uid = 2; //uid used to know which folder to place image
+  let Filename = this.uid + '_' + this.data.slug + '_' + this.n + 'img.jpg'
   let loader = this.loadingCtrl.create({
     content: "Uploading..."
   });
@@ -388,7 +408,7 @@ chooseMedia() {
 
   fileTransfer.upload(this.imageURI, this.wordpressUrl + '/upload.php', options)
     .then((data) => {
-    //this.getData();
+    //path to uploaded image
     this.image = this.wordpressUrl + "/upload/file" + this.uid + "/" + Filename;
     this.images.push(this.image);
     //save filename into array
@@ -396,12 +416,12 @@ chooseMedia() {
     loader.dismiss();
     this.presentToast("Image uploaded successfully ");
   }, (err) => {
-    //console.log(err);
     loader.dismiss();
     this.presentToast(err);
   });
 }
 
+//Create Toast
 presentToast(msg) {
   let toast = this.toastCtrl.create({
     message: msg,
@@ -426,7 +446,6 @@ presentToast(msg) {
     * @param max     {Number}   		Maximum numeric value
     * @return {Number}
     */
-   //
   generateRandomValue(min : number, max : number) : number {
       let maxVal : number     = max,
           minVal : number     = min,

@@ -76,6 +76,7 @@ export class SignaturePage2 {
     this.storage.remove('preparedby');
     this.storage.remove('address');
     this.storage.remove('city');
+    this.storage.remove('postcode');
     //get the current user object for the homepage
     this.getUser();
   }

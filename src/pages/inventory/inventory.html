@@ -3,7 +3,7 @@
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title>Create Portfolio</ion-title>
+    <ion-title>{{ title }} Portfolio</ion-title>
   </ion-navbar>
 </ion-header>
 
@@ -13,60 +13,40 @@
         <ion-card-content>
           <ion-card-title text-center><ion-icon  name="arrow-dropright-circle" color="primary"></ion-icon>&nbsp;Step 1 </ion-card-title>
           <p text-center>Enter client details</p>
-          <ion-list *ngIf="!Readonly">
+          <ion-list>
 
             <ion-item>
                <ion-label stacked >Client Name</ion-label>
-              <ion-input type="text" name="name" required [(ngModel)]="data.name" ></ion-input>
+              <ion-input type="text" name="name" required [(ngModel)]="data.name" [disabled]="Readonly" ></ion-input>
            </ion-item>
 
             <ion-item>
             <ion-label stacked color="primary">Date of Birth</ion-label>
-            <ion-input  type="text" name="dob" required [(ngModel)]="data.dob" ></ion-input>
+            <ion-input  type="text" name="dob" required [(ngModel)]="data.dob" [disabled]="Readonly"></ion-input>
           </ion-item>
 
             <ion-item>
                <ion-label stacked >Prepared By</ion-label>
-              <ion-input type="text" name="preparedby" required [(ngModel)]="data.preparedby"></ion-input>
+              <ion-input type="text" name="preparedby" required [(ngModel)]="data.preparedby" [disabled]="Readonly"></ion-input>
            </ion-item>
 
            <ion-item>
              <ion-label stacked >Address</ion-label>
-              <ion-input type="text" name="address" [(ngModel)]="data.address"></ion-input>
+              <ion-input type="text" name="address" [(ngModel)]="data.address" [disabled]="Readonly"></ion-input>
             </ion-item>
 
         <ion-item>
           <ion-label stacked color="primary">City</ion-label>
-          <ion-input  type="text" placeholder="Your city" name="city" [(ngModel)]="data.city" ></ion-input>
+          <ion-input  type="text" placeholder="Your city" name="city" [(ngModel)]="data.city" [disabled]="Readonly"></ion-input>
         </ion-item>
 
         <ion-item>
           <ion-label stacked color="primary">Postcode</ion-label>
-          <ion-input  type="text" placeholder="i.e. SW1 4AD" name="postcode" [(ngModel)]="data.postcode"></ion-input>
+          <ion-input  type="text" placeholder="i.e. SW1 4AD" name="postcode" [(ngModel)]="data.postcode" [disabled]="Readonly"></ion-input>
         </ion-item>
          
       </ion-list>
 
-      <ion-list *ngIf="Readonly">
-        <ion-item>
-           <p><b>Client Name:</b> <span>{{Name}}</span></p>
-       </ion-item>
-       <ion-item>
-           <p><b>Date of Birth:</b> <span>{{Dob}}</span></p>
-       </ion-item>
-       <ion-item>
-           <p><b>Prepared By:</b> <span>{{Preparedby}}</span></p>
-       </ion-item>
-       <ion-item>
-           <p><b>Address:</b> <span>{{Address}}</span></p>
-       </ion-item>
-       <ion-item>
-           <p><b>City:</b> <span>{{City}}</span></p>
-       </ion-item>
-       <ion-item>
-           <p><b>Postcode:</b> <span>{{Postcode}}</span></p>
-       </ion-item>
-      </ion-list>
       <ion-input type="hidden" name="uid" [(ngModel)]="data.uid" value="{{uid}}"></ion-input>
 
       </ion-card-content>
