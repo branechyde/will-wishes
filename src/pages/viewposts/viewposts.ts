@@ -40,7 +40,7 @@ export class ViewPosts implements OnInit  {
 		public modalController:ModalController,
 		private storage: Storage,
 		) { }
-   
+    //On page load
 	ngOnInit() {
 		this.category = this.navParams.get('category');
 		this.tag = this.navParams.get('tag');
@@ -52,7 +52,7 @@ export class ViewPosts implements OnInit  {
         
 	}
 
-
+	//on backbutton return 
    ionViewWillEnter() {
 	let loader = this.loadingController.create({
 		content: "Please wait", duration: 1000
@@ -143,6 +143,20 @@ export class ViewPosts implements OnInit  {
     //take us to inventory page
     this.navController.push(InventoryPage, { post: post, clone: 3 });
    }
+
+   //create new inventory
+  createPortfolio() {
+    //Remove stored variables
+    this.storage.remove('session_id');
+    this.storage.remove('name');
+    this.storage.remove('dob');
+    this.storage.remove('preparedby');
+    this.storage.remove('address');
+    this.storage.remove('city');
+    this.storage.remove('postcode');
+    //take us to inventory page
+    this.navController.push(InventoryPage);
+  }
    
    //open signature pad
    openSignatureModel(){

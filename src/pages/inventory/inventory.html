@@ -1,5 +1,5 @@
 <ion-header>
-  <ion-navbar>
+  <ion-navbar hideBackButton="true">
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
@@ -97,8 +97,6 @@
               </ion-row>
             </ion-grid>
           -->
-        
-  
            <ion-grid no-padding>
               <ion-row>
                 <ion-col col-6 *ngFor="let image of images; let id = index" class="no-padding">
@@ -107,6 +105,7 @@
                 </ion-col>
               </ion-row>
             </ion-grid>
+
           <!--
             <ul>
             <li *ngFor="let page of pages">
@@ -122,7 +121,6 @@
           </ion-item>
         </ion-list>
 
-    
     <ion-card>
     <ion-card-header>
       Response
@@ -131,7 +129,9 @@
       <b>{{data.response}}</b>
     </ion-card-content>
   </ion-card>
-        --> 
+  
+     --> 
+       
 
 
           <!-- end -->
@@ -140,6 +140,18 @@
   </ion-simple-wizard>
 
   
-
+    <ion-grid>
+      <ion-row>
+        <ion-col col-4>
+          <button ion-button full color="danger" (click)="Cancel()">Cancel</button> 
+        </ion-col>
+        <ion-col col-4>
+          <button ion-button full color="light" >Clear</button> 
+        </ion-col>
+        <ion-col col-4>
+          <button ion-button full color="secondary" >Save</button> 
+        </ion-col>
+      </ion-row>
+    </ion-grid>
 
 </ion-content>

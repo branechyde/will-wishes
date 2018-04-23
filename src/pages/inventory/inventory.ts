@@ -118,7 +118,7 @@ export class InventoryPage {
     } 
   }
  
-  //used to be ngOnInit() 
+  //used to be onviewenter() 
   ngOnInit() {
     this.images = [];
     this.photos = [];
@@ -141,8 +141,6 @@ export class InventoryPage {
   getID() {
    if (this.clone == 1) { //clone new portfolio
         this.session = this.generateRandomValue(200000, 1000000);
-        //this.storage.set('session_id', this.session);
-        //Set the tag for sending
         this.data.slug = this.session;
         this.data.name = this.post.acf.client_name;
         this.data.dob = this.post.acf.date_of_birth;
@@ -155,8 +153,6 @@ export class InventoryPage {
         this.data.bequeathedto = this.post.acf.asset_bequeathed_to;
 
     } else if (this.clone == 2) { //clone into current portfolio/ client fields will be disabled
-        //save cloned tag
-        //this.storage.set('session_id', this.post.tags[0]);
         this.Readonly = true; 
         this.data.slug = this.post.tags[0];
         //Set other cloned variables
@@ -216,24 +212,17 @@ export class InventoryPage {
       //Remove current tag id
      this.storage.remove('session_id');
      //SET VALUE TO RETURN NO RESULTS FOR SEARCH
-
+     //set storage to noresults
     }
-
-    //Pass data and switch to homepage
-    this.gotoHomepage();
+    //Pass data and switch to viewpost
+    this.navCtrl.push(ViewPosts, {signatureImage: 1});
   }
   
-  //Goto homepage after sending the data
-  gotoHomepage() {
-      this.storage.get('wordpress.user')
-      .then(data => {
-          if(data) {
-            this.user = data;
-            this.navCtrl.push(HomePage, {signatureImage: 1, user: this.user});
-          }
-      });
+  //Goto Viewposts after sending the data
+  Cancel() {
+    this.navCtrl.push(ViewPosts);
+   
   }
-  
 
   //Store form data
   getStoreData() {
@@ -267,16 +256,21 @@ export class InventoryPage {
 
   //Send form data
   sendData() {
+  	let loader = this.loadingCtrl.create({
+      content: "Please wait..."
+    });
+    loader.present();
   	this.getStoreData();
-    var link = this.wordpressUrl + '/api.php';
+    var link = this.wordpressUrl + '/create_portfolio.php';
     var formData = '';
     formData = JSON.stringify({uid: this.data.uid, slug: this.data.slug, name: this.data.name, preparedby: this.data.preparedby, 
     	                         assetname: this.data.assetname, description: this.data.description, address: this.data.address, 
-                                city: this.data.city, postcode: this.data.postcode, dob: this.data.dob, bequeathedto: this.data.bequeathedto});
+                                city: this.data.city, postcode: this.data.postcode, dob: this.data.dob, bequeathedto: this.data.bequeathedto, images: this.filenames});
     
     this.http.post(link, formData).subscribe(data => {
       //this.data.response = data["_body"]; 
-      console.log("Data submitted");
+      loader.dismiss();
+      this.presentToast("Portfolio Created");
     }, error => {
         console.log("Oooops!");
     });
