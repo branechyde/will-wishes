@@ -1,15 +1,19 @@
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
+import { Response, RequestOptions, Headers, Http} from '@angular/http';
 //import { Config } from '../../app/app.config';
 import 'rxjs/add/operator/map';
+import { Storage } from '@ionic/storage';
 
 @Injectable()
 export class WordpressService {
    public tagID : any;
    public wordpressApiUrl = 'http://willwishes.uk/wp-json';
    //public wordpressApiUrl = 'https://julienrenaux.fr/wp-json';
+   public token: any;
 
-	constructor(private http: Http) {}
+	constructor(private http: Http,
+		        private storage: Storage,
+		        ) {}
 
 	public signup(data) {
 		let url = 'http://willwishes.uk/create_user.php';
@@ -29,12 +33,23 @@ export class WordpressService {
   
   //Get all posts
 	public getPostsbyName(name) {
+		this.storage.get('token').then((data) => {
+			this.token = data;
+			console.log('here is your token ' + this.token); 
+	    }); 
+		let headers = new Headers();
+	    headers.append('Content-Type', 'application/x-www-form-urlencoded');
+	    headers.append('Accept', 'application/json');
+	    headers.append('Authorization', 'Bearer ' + this.token);
+    	let options = new RequestOptions({ headers: headers });
 		let url = this.wordpressApiUrl + `/chenko/v2/my_meta_query?meta_query[0][key]=client_name&meta_query[0][value]=${name}`;
-		return this.http.get(url)
+		return this.http.get(url, options)
 	  	.map(result => {
 			return result.json();
-		});    
+		  });  
+		  
 	}
+
 	//get post by query
 	public getPosts(query) {
 		query = this.transformRequest(query);
@@ -46,16 +61,34 @@ export class WordpressService {
 	}
     //Get posts by tag id
 	public getPostsbytag(id) {
+		this.storage.get('token').then((data) => {
+			this.token = data;
+			console.log('here is your token ' + this.token); 
+	    }); 
+		let headers = new Headers();
+	    headers.append('Content-Type', 'application/x-www-form-urlencoded');
+	    headers.append('Accept', 'application/json');
+	    headers.append('Authorization', 'Bearer ' + this.token);
+    	let options = new RequestOptions({ headers: headers });
 		let url = this.wordpressApiUrl + `/wp/v2/posts?tags=${id}&per_page=100`;
-		return this.http.get(url)
+		return this.http.get(url,options)
 	  	.map(result => {
 			return result.json();
 		});    
 	}
     //Get the id of a tag by its slug
 	public getTagID(slug) {
+	  this.storage.get('token').then((data) => {
+			this.token = data;
+			console.log('here is your token ' + this.token); 
+	    }); 
+		let headers = new Headers();
+	    headers.append('Content-Type', 'application/x-www-form-urlencoded');
+	    headers.append('Accept', 'application/json');
+	    headers.append('Authorization', 'Bearer ' + this.token);
+    	let options = new RequestOptions({ headers: headers });
 	  let url = this.wordpressApiUrl + `/wp/v2/tags?slug=${slug}`;
-      return this.http.get(url)
+      return this.http.get(url, options)
       .map(result => {
 			return result.json();
 	  });    
@@ -125,5 +158,7 @@ export class WordpressService {
 		}
 		return str.join('&');
 	}
+
+	
 
 }

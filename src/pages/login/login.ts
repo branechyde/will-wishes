@@ -32,6 +32,8 @@ export class Login {
 
     this.wordpressService.login(this.account).subscribe((result) => {
       loader.dismiss();
+      this.authSuccess(result.token);
+      console.log(result.token);
       this.storage.set('wordpress.user', result);
       this.navController.push(HomePage, {
         user: result
@@ -49,6 +51,14 @@ export class Login {
         toast.present();
       }
     });
+  }
+
+  //Save the token
+  authSuccess(token) {
+    //this.error = null;
+    this.storage.set('token', token);
+    //this.user = this.jwtHelper.decodeToken(token).username;
+    //this.storage.set('profile', this.user);
   }
 
 }

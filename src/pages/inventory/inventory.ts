@@ -220,7 +220,7 @@ export class InventoryPage {
   
   //Goto Viewposts after sending the data
   Cancel() {
-    this.navCtrl.push(ViewPosts);
+    this.navCtrl.push(HomePage);
    
   }
 

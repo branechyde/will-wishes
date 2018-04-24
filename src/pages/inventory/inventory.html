@@ -8,6 +8,10 @@
 </ion-header>
 
 <ion-content scroll="false">
+  <ion-fab top right edge #fab1>
+    <button ion-fab mini color="danger" (click)="Cancel()"><ion-icon ios="ios-close" md="md-close"></ion-icon></button>
+ </ion-fab>
+
   <ion-simple-wizard [(step)]="step" [showSteps]="false" (finish)="onFinish()" [finishIcon]="'done-all'" [(stepCondition)]="stepCondition">
     <ion-wizard-step>
         <ion-card-content>
@@ -139,19 +143,6 @@
     </ion-wizard-step>
   </ion-simple-wizard>
 
-  
-    <ion-grid>
-      <ion-row>
-        <ion-col col-4>
-          <button ion-button full color="danger" (click)="Cancel()">Cancel</button> 
-        </ion-col>
-        <ion-col col-4>
-          <button ion-button full color="light" >Clear</button> 
-        </ion-col>
-        <ion-col col-4>
-          <button ion-button full color="secondary" >Save</button> 
-        </ion-col>
-      </ion-row>
-    </ion-grid>
+
 
 </ion-content>

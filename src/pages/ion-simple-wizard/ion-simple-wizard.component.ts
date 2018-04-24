@@ -2,6 +2,9 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 /*import { Keyboard } from '@ionic-native/keyboard';*/
 import { Events } from 'ionic-angular';
 import { WizardAnimations } from './ion-simple-wizard-animations';
+import { ViewPosts } from '../viewposts/viewposts';
+import { HomePage} from '../home/home';
+import {  NavController } from 'ionic-angular';
 
 @Component({
   selector: 'ion-simple-wizard',
@@ -18,7 +21,8 @@ export class IonSimpleWizard {
   public hideWizard = false;//Default
   @Input() stepCondition = true;//Default
 
-  constructor(public evts: Events) {
+  constructor(public evts: Events,
+             public navCtrl: NavController ) {
   }
 
   ngOnInit() {
@@ -73,5 +77,6 @@ export class IonSimpleWizard {
     this.stepChange.emit(this.step + 1);
     this.evts.publish('step:next');
   }
+
 
 }

@@ -36,7 +36,7 @@
       <ion-thumbnail item-start>
         <img *ngIf="post.featured_media" [id]="post.featured_media" [src]="post.featured_image" (click)="loadPost(post)">
       </ion-thumbnail>
-      <p class="date"><ion-icon ios="ios-create" md="md-create"></ion-icon>&nbsp;Edit Entry | <ion-icon name="copy"></ion-icon>&nbsp;Clone Entry</p>
+      <p class="date">{{post.date | date: 'fullDate'}}</p>
       <h2 [innerHTML]="post.title.rendered"></h2>
       <p>{{post.content.rendered | trimHTML | truncate: 100 }}</p>
       <p>Bequeathed to: {{post.acf.asset_bequeathed_to }}</p>

@@ -2,7 +2,7 @@ import { Component, ViewChild } from '@angular/core';
 import { Nav, Platform } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
-
+import { Storage } from '@ionic/storage';
 import { Welcome } from '../pages/welcome/welcome';
 import { HomePage } from '../pages/home/home';
 import { InventoryPage } from '../pages/inventory/inventory';
@@ -33,7 +33,11 @@ export class MyApp {
 
   pages: Array<{title: string, component: any, index: number, icon: string}>;
 
-  constructor(public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen) {
+  constructor(public platform: Platform, 
+              public statusBar: StatusBar, 
+              public splashScreen: SplashScreen,
+              private storage: Storage) {
+
     this.initializeApp();
 
     // used for an example of ngFor and navigation
@@ -41,7 +45,7 @@ export class MyApp {
       { title: 'Home', component: HomePage, index: 0,icon: 'home' },
       //{ title: 'About', component: AboutPage, index: 1, icon: 'person' },
       { title: 'Create Portfolio', component: InventoryPage, index: 2, icon: 'bookmarks' },
-      { title: 'Log Out', component: ViewPosts, index: 3, icon: 'person' },
+      //{ title: 'Log Out', component: ViewPosts, index: 3, icon: 'person' },
       //{ title: 'Settings', component: AboutPage, index: 4, icon: 'cog' },
       //{ title: 'Contact', component: ContactPage, index: 5, icon: 'contact' },
      // { title: 'List Pages', component: ViewPages, index: 6, icon: 'plane' },
@@ -65,6 +69,11 @@ export class MyApp {
     this.nav.setRoot(page.component);
   }
   
+ logout() {
+    //this.user = undefined;
+    this.storage.remove('wordpress.user');
+    this.nav.setRoot(Welcome);
+  }
 
   /* 
   isActive(page: PageInterface) {
