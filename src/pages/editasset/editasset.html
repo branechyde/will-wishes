@@ -1,10 +1,12 @@
 <ion-header>
-	<ion-navbar>
-		<button menuToggle>
-			<ion-icon name="menu"></ion-icon>
-		</button>
-		<ion-title *ngIf="post"> Edit {{post.title.rendered}}</ion-title>
-	</ion-navbar>
+<ion-navbar hideBackButton="true">
+    <ion-buttons left>
+        <button ion-button icon-only (click)="cancelEdit(post)" class="my-style-for-modal">
+            <ion-icon name="arrow-back"></ion-icon>
+        </button>
+    </ion-buttons>
+    <ion-title *ngIf="post"> Edit {{post.title.rendered}}</ion-title>
+</ion-navbar>
 </ion-header>
 
 <ion-content class="post">

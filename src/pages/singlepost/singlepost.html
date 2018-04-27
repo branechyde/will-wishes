@@ -1,19 +1,17 @@
 <ion-header>
-	<ion-navbar>
-		<button menuToggle>
-			<ion-icon name="menu"></ion-icon>
-		</button>
-		<ion-title *ngIf="post">{{post.title.rendered}}</ion-title>
-	</ion-navbar>
+<ion-navbar hideBackButton="true">
+    <ion-buttons left>
+        <button ion-button icon-only (click)="goBack()" class="my-style-for-modal">
+            <ion-icon name="arrow-back"></ion-icon>
+        </button>
+    </ion-buttons>
+    <ion-title *ngIf="post"> Edit {{post.title.rendered}}</ion-title>
+</ion-navbar>
 </ion-header>
 
 <ion-content class="post">
   <ion-list *ngIf="post">
     <ion-item>
-        <ion-item text-wrap>
-            <h1 [innerHTML]="post.title.rendered"></h1>
-            <h4>{{post.date | date: 'fullDate'}}</h4> 
-        </ion-item>
         <img *ngIf="post.featured_media" [id]="post.featured_media" [src]="post.featured_image" >
     </ion-item>
 
@@ -32,20 +30,11 @@
 	</ion-grid>
 
 	 <ion-card class="bottom" padding text-wrap *ngIf="post.content.rendered">
+      <h1 [innerHTML]="post.title.rendered"></h1>
+      <p>{{post.date | date: 'fullDate'}}</p>
       <p [innerHtml]="post.content.rendered"></p>
       <p><b>Bequeathed to:</b> {{post.acf.asset_bequeathed_to }}</p>
     </ion-card>
-<!--
-	<ion-list *ngIf="comments">
-	  <ion-item-divider light>Comments</ion-item-divider>
-	  <ion-item text-wrap *ngFor="let comment of comments">
-	    <ion-avatar item-left>
-	      <img [src]="comment.author_avatar_urls[96]">
-	    </ion-avatar>
-	    <h2>{{comment.author_name}}</h2>
-	    <p [innerHTML]="comment.content.rendered"></p>
-	  </ion-item>
-	</ion-list> -->
   </ion-list>
 
    <ion-fab left bottom #fab4>

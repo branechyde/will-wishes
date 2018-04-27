@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { NavController,  App, NavParams, LoadingController, ToastController } from 'ionic-angular';
+import { NavController,  App, NavParams, LoadingController, ToastController, ViewController } from 'ionic-angular';
 import {SignaturePad} from 'angular2-signaturepad/signature-pad';
 import {SignaturePage} from '../signature/signature';
 import {HomePage} from '../home/home';
@@ -26,7 +26,7 @@ export class SignaturePage2 {
   data:any = {};
   user: any;
 
-  constructor(private navParams: NavParams, public navCtrl: NavController, public http: Http, 
+  constructor(private navParams: NavParams, public navCtrl: NavController, public http: Http, public viewCtrl: ViewController, 
   private transfer: FileTransfer, public loadingCtrl: LoadingController,
   public toastCtrl: ToastController, public app: App, private storage: Storage) { 
     this.signatureImage = navParams.get('signatureImage'); 
@@ -58,7 +58,8 @@ export class SignaturePage2 {
 
   
   drawCancel() {
-    this.navCtrl.push(SignaturePage);
+    //this.navCtrl.push(SignaturePage);
+    this.viewCtrl.dismiss();
   }
 
    drawComplete() {
@@ -79,20 +80,22 @@ export class SignaturePage2 {
     this.storage.remove('postcode');
     //get the current user object for the homepage
     this.getUser();
+     this.viewCtrl.dismiss().then(() => {
+     this.app.getRootNav().setRoot(HomePage, {signatureImage: this.signatureImage, user: this.user});
+   });
+    
   }
 
   drawClear() {
-    this
-      .signaturePad
-      .clear();
+    this.signaturePad.clear();
   }
-
+  
+  //get the user variable
   getUser() {
       this.storage.get('wordpress.user')
       .then(data => {
           if(data) {
             this.user = data;
-            this.navCtrl.push(HomePage, {signatureImage: this.signatureImage, user: this.user});
           }
       });
   }
@@ -113,7 +116,7 @@ export class SignaturePage2 {
 //upload signature to server
  uploadFile(signature, slug) {
   let random = this.generateRandomValue(27, 2);
-  let Filename = slug+'_'+random + 'sig2.png'
+  let Filename = slug+'_2_'+random + 'sig.png'
   let loader = this.loadingCtrl.create({
     content: "Uploading..."
   });
@@ -130,7 +133,7 @@ export class SignaturePage2 {
   fileTransfer.upload(signature, 'http://willwishes.uk/addsignature.php', options)
     .then((data) => {
     loader.dismiss();
-    this.presentToast("Signature uploaded successfully ");
+    this.presentToast("Portfolio exported successfully!");
   }, (err) => {
     console.log(err);
     loader.dismiss();

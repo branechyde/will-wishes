@@ -1,20 +1,13 @@
-
 <ion-header>
-  <ion-navbar hideBackButton="true">
-    <button ion-button [menuToggle]="activeMenu">
+ <ion-navbar hideBackButton="true">
+    <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title>
-      Home
-    </ion-title>
+    <ion-title>Home</ion-title>
   </ion-navbar>
 </ion-header>
 
 <ion-content scroll="false" class="page-welcome" text-center>
-
-  <ion-fab top right edge #fab1>
-    <button ion-fab mini [menuToggle]="activeMenu"><ion-icon name="menu"></ion-icon></button>
- </ion-fab>
 
   <div class="splash-bg"></div>
   <div class="splash-info">
@@ -52,7 +45,7 @@
         <ion-input type="text" placeholder="Enter Client name or Portfolio ID" [(ngModel)]="search" name="search"></ion-input>
       </ion-col>
       <ion-col col-3 class="search-button" >
-        <button ion-button color="primary" full (click)="searchPosts()">Search</button>
+        <button ion-button color="primary" full (click)="searchPosts()"><ion-icon ios="ios-search" md="md-search"></ion-icon>&nbsp;Search</button>
       </ion-col>
 
   </ion-row>

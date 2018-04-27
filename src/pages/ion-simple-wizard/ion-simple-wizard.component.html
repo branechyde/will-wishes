@@ -28,7 +28,7 @@
     </ion-fab>
     <!--Finish Button-->
     <ion-fab [@btnState] *ngIf="(isOnFinalStep() && getCondition())" right bottom>
-      <button ion-fab (click)="finish.emit(step + 1)">
+      <button ion-fab [disabled]="!disabled" (click)="finish.emit(step + 1)">
         <ion-icon name="eye"></ion-icon>
       </button>
     </ion-fab>

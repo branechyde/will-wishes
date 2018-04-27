@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import {  NavController, AlertController, Events, LoadingController, ToastController, App, NavParams } from 'ionic-angular';
-import { AuthService } from "../../providers/auth-service/auth-service";
 import { Storage } from '@ionic/storage';
 import { Http } from '@angular/http'; 
 import 'rxjs/add/operator/map';
@@ -53,8 +52,7 @@ export class InventoryPage {
     public http: Http, 
     public alertCtrl: AlertController, 
     public evts: Events, 
-    private camera: Camera, 
-    public authService: AuthService, 
+    private camera: Camera,
     private transfer: FileTransfer,
     public loadingCtrl: LoadingController,
     public toastCtrl: ToastController) {
@@ -87,36 +85,87 @@ export class InventoryPage {
     //You can subscribe to the Event 'step:changed' to handle the current step
     this.evts.subscribe('step:changed', step => {
       //Handle the current step if you need
-      this.currentStep = step[0];
+      this.currentStep = step;
       //Set the step condition to the default value
       this.stepCondition = this.stepDefaultCondition;
+      console.log('step changed: ', this.currentStep);
     });
 
     this.evts.subscribe('step:next', () => {
       //Do something if next
-      console.log('Next pressed: ', this.currentStep);
+      //check if fields are empty
+      if (this.data.name == null) {
+       this.storage.set('error', 1);
+       console.log('complete name');
+      } else {
+       this.storage.set('error', 0);
+      }
+      
+      if (this.data.dob  == null) {
+       this.storage.set('error', 1);
+       console.log('complete dob');
+      } else {
+       this.storage.set('error', 0);
+      }
+
+      if (this.data.preparedby  == null) {
+       this.storage.set('error', 1);
+       console.log('complete prepared by');
+      } else {
+       this.storage.set('error', 0);
+      }
+
+      if (this.data.address == null) {
+       this.storage.set('error', 1);
+       console.log('complete Address');
+      } else {
+       this.storage.set('error', 0);
+      }
+      
+      if (this.data.city  == null) {
+       this.storage.set('error', 1);
+       console.log('complete City');
+      } else {
+       this.storage.set('error', 0);
+      }
+     /*
+      if (this.data.assetname  == null) {
+       this.storage.set('error', 1);
+       console.log('Enter Asset name');
+      } else {
+       this.storage.set('error', 0);
+      }
+
+      if (this.data.description == null) {
+       this.storage.set('error', 1);
+       console.log('Enter description');
+      } else {
+       this.storage.set('error', 0);
+      }
+      
+      if (this.data.bequeathedto  == null) {
+       this.storage.set('error', 1);
+       console.log('Complete Bequeathedto');
+      } else {
+       this.storage.set('error', 0);
+      }
+     */
+
     });
 
     this.evts.subscribe('step:back', () => {
       //Do something if back
-      console.log('Back pressed: ', this.currentStep);
+      //console.log('Back pressed: ', this.currentStep);
     });
-
+    //Show delete button
     this.showDelete = false;
     this.Readonly = false;    
   }
 
   toggle() {
-    //this.stepCondition = !this.stepCondition;
     this.showDelete = !this.showDelete;
   }
   
-  //If required fields are not empty 
-  textChange() {
-    if (this.data.name !== '' && this.data.dob  !== '' && this.data.preparedby  !== '') {
-      this.stepCondition = true;
-    } 
-  }
  
   //used to be onviewenter() 
   ngOnInit() {
@@ -208,19 +257,19 @@ export class InventoryPage {
     }
     //send the form data
     this.sendData();
-    if (this.clone == 1) { 
-      //Remove current tag id
-     this.storage.remove('session_id');
-     //SET VALUE TO RETURN NO RESULTS FOR SEARCH
-     //set storage to noresults
+    //If we clone is set
+    if (this.clone) {
+      //Pass data and switch to viewpost
+      this.navCtrl.setRoot(ViewPosts, {signatureImage: 1, search: this.post.acf.client_name });
+    } else {
+      //Pass data and switch to viewpost
+      this.navCtrl.setRoot(ViewPosts, {signatureImage: 1, search: this.session });
     }
-    //Pass data and switch to viewpost
-    this.navCtrl.push(ViewPosts, {signatureImage: 1});
   }
   
   //Goto Viewposts after sending the data
   Cancel() {
-    this.navCtrl.push(HomePage);
+    this.navCtrl.setRoot(HomePage);
    
   }
 

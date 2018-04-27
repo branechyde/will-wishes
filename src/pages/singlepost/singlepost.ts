@@ -5,6 +5,7 @@ import { SocialSharing } from '@ionic-native/social-sharing';
 import { WordpressService } from '../services/wordpress.service';
 import { InventoryPage } from '../inventory/inventory';
 import { editAsset } from '../editasset/editasset';
+import { ViewPosts } from '../viewposts/viewposts';
 
 @Component({
   selector: 'page-singlepost',
@@ -26,24 +27,15 @@ export class SinglePost {
 			private iab: InAppBrowser,
 			private socialSharing: SocialSharing
 		) {
-		//get post object
-		//if (navParams.get('post')) {
 			this.post = navParams.get('post');
-		//}
 	}
-
+  /* 
   ionViewDidLoad() {
     console.log('ionViewDidLoad');
   }
- 
   ionViewWillEnter() {
     console.log('ionViewWillEnter');
   }
- 
-  ionViewDidEnter() {
-    this.getPost(this.post.id);
-  }
- 
   ionViewWillLeave() {
     console.log('ionViewWillLeave');
   }
@@ -53,12 +45,17 @@ export class SinglePost {
   ionViewWillUnload() {
     console.log('ionViewWillUnload');
   }
-
+  */
+ 
+  ionViewDidEnter() {
+    this.getPost(this.post.id);
+  }
+  
+  //function to get a single post
   getPost(id) {
   	let loader = this.loadingController.create({
 			content: "Please wait"
 		});
-
 		loader.present();
 		this.wordpressService.getPost(id)
 		.subscribe(result => {
@@ -75,13 +72,13 @@ export class SinglePost {
         {
           text: 'New Portfolio',
           handler: () => {
-    		this.navCtrl.push(InventoryPage, { post: this.post, clone: 1 });
+    		this.navCtrl.setRoot(InventoryPage, { post: this.post, clone: 1 });
           }
         },
         {
           text: 'Current Portfolio',
           handler: () => {
-    		this.navCtrl.push(InventoryPage, { post: this.post, clone: 2 });
+    		this.navCtrl.setRoot(InventoryPage, { post: this.post, clone: 2 });
           }
         },
         {
@@ -109,6 +106,10 @@ export class SinglePost {
    editAsset() {
      this.navCtrl.push(editAsset, { post: this.post });
    }
+   //send back the tag id
+   goBack() {
+   this.navCtrl.setRoot(ViewPosts, {search: this.post.acf.client_name});
+  }
 
 
 }

@@ -42,60 +42,49 @@ export class ViewPosts implements OnInit  {
 		) { }
     //On page load
 	ngOnInit() {
-		this.category = this.navParams.get('category');
-		this.tag = this.navParams.get('tag');
-		this.author = this.navParams.get('author');
-		this.hideSearchbar = true;
-		this.search = '';
-		this.favoritePosts = [];
+		//this.tag = this.navParams.get('tag');
 		this.search = this.navParams.get('search');
-        
 	}
 
 	//on backbutton return 
    ionViewWillEnter() {
-	let loader = this.loadingController.create({
-		content: "Please wait", duration: 1000
-	});
-	loader.present();
-	//Get slug from session or input
-	this.storage.get('session_id').then((data) => {
-      //if a search is entered 
-      if (this.search != null) {
       	this.getTagID(this.search);
-      } else {
-      //if the session is not empty
-      if (data != null) {
-      	this.getTagID(data);
-      } 
-     }
-     loader.dismiss();
-    });
-  }
+    }
  
 
     //Retrieve post by tagID
-	getTagID(slug) {
-		this.wordpressService.getTagID(slug).subscribe(data => {
-		// if a result is returned
+    getTagID(slug) {
+      let loader = this.loadingController.create({
+			content: "Please wait...", duration: 12000
+	  });
+      loader.present();
+      //search by portfolio id
+      this.wordpressService.getTagID(slug).subscribe(data => {
+      // if a result is returned
          if (typeof data !== 'undefined' && data.length > 0) {
            this.tagID = data[0].id;
            this.getTaggedPosts(this.tagID);
-           //save the current tag name, so if the portfolio is signed the correct tag is used to sign the signatures
+           //save the current tag name, so if the portfolio is signed
+           // the correct tag is used to sign the signatures
            this.storage.set('session_id', slug);
          } else { 
-            //run another search 
-			this.wordpressService.getPostsbyName(this.search).subscribe(result => {
-			 if (typeof result !== 'undefined' && result.length > 0) {
-	           this.getTaggedPosts( result[0].id);
-	           this.storage.set('session_id', result[0].slug);
-	          } else { this.noresults = 1;}
-			});
+            //search by clientname 
+            this.wordpressService.getPostsbyName(this.search).subscribe(result => {
+             if (typeof result !== 'undefined' && result.length > 0) {
+                   this.getTaggedPosts( result[0].id);
+                   this.storage.set('session_id', result[0].slug);
+                  } else { this.noresults = 1;}
+             });
          }
-		});
-	}
-	//Get only tagged post - SHOULD WE DELETE THIS
+         loader.dismiss();
+    });
+   }
+	//Get only tagged post 
 	getTaggedPosts(tagID) {
+		 let loader = this.loadingController.create({
+			content: "Searching...", duration: 12000
+		});
+        loader.present();
 		this.wordpressService.getPostsbytag(tagID)
 		.subscribe(result => {
 			this.posts = result;
@@ -105,29 +94,10 @@ export class ViewPosts implements OnInit  {
 			this.Address = result[0].acf.address;
 			this.City = result[0].acf.city;
 			this.Postcode = result[0].acf.postcode;
-		});
-	}
-   
-
-   //Delete this
-	getPosts() {
-		this.pageCount = 1;
-		let query = this.createQuery();
-		let loader = this.loadingController.create({
-			content: "Please wait", duration: 500
-		});
-		loader.present();
-		this.wordpressService.getPosts(query)
-		.subscribe(result => {
-			this.posts = result;
 			loader.dismiss();
 		});
 	}
-    //delete this as it no longer used
-	searchPosts() {
-    	this.getPosts();
-	}
-    
+   
     //Display a single post
 	loadPost(post) {
 		this.navController.push(SinglePost, { post: post });
@@ -136,12 +106,12 @@ export class ViewPosts implements OnInit  {
 	backHome() {
 		//remove the session id
 		//this.storage.remove('session_id');
-		this.navController.push(HomePage);
+		this.navController.setRoot(HomePage);
 	}
 
+    //Determine what action should be taken by inventory page
 	addAssets(post) {
-    //take us to inventory page
-    this.navController.push(InventoryPage, { post: post, clone: 3 });
+    this.navController.setRoot(InventoryPage, { post: post, clone: 3 });
    }
 
    //create new inventory
@@ -155,7 +125,7 @@ export class ViewPosts implements OnInit  {
     this.storage.remove('city');
     this.storage.remove('postcode');
     //take us to inventory page
-    this.navController.push(InventoryPage);
+    this.navController.setRoot(InventoryPage);
   }
    
    //open signature pad
@@ -163,24 +133,6 @@ export class ViewPosts implements OnInit  {
     setTimeout(() => {
     let modal = this.modalController.create(SignaturePage);
     modal.present(); }, 300);
-   }
-
-   createQuery() {
-	let query = {};
-	query['page'] = this.pageCount;
-	if(this.search) {
-	 	query['search'] = this.search;
-	}
-	if(this.category) {
-		query['categories'] = this.category.id;
-	}
-	if(this.tag) {
-		query['tags'] = this.tag.id;
-	}
-	if(this.author) {
-		query['author'] = this.author;
-	}
-	return query;
    }
 
 }

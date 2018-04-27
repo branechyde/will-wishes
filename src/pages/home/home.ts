@@ -1,15 +1,16 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
+import { NavController, NavParams, ToastController, LoadingController } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 import { Login } from '../login/login';
-import { ContactPage } from '../contact/contact';
 import { InventoryPage } from '../inventory/inventory';
 import { Welcome} from '../welcome/welcome';
 import { ViewPosts } from '../viewposts/viewposts';
+import { WordpressService } from '../services/wordpress.service';
 
 @Component({
   selector: 'page-home',
-  templateUrl: 'home.html'
+  templateUrl: 'home.html',
+  providers: [ WordpressService ],
 })
 export class HomePage {
   public signatureImage : any;
@@ -20,8 +21,12 @@ export class HomePage {
 
   constructor(
     private navParams: NavParams,
+    private wordpressService: WordpressService,
     private storage: Storage,
-    public navCtrl: NavController) {
+    public navCtrl: NavController,
+    private loadingController: LoadingController,
+    private toastController: ToastController,
+    ) {
     this.user = navParams.get('user');
     this.signatureImage = navParams.get('signatureImage');
     this.showAssetBtn();
@@ -49,20 +54,12 @@ export class HomePage {
     this.storage.remove('city');
     this.storage.remove('postcode');
     //take us to inventory page
-    this.navCtrl.push(InventoryPage);
+    this.navCtrl.setRoot(InventoryPage);
   }
 
   addAssets() {
     //take us to inventory page
     this.navCtrl.push(InventoryPage);
-  }
-
-  viewLast() {
-    this.navCtrl.push(ViewPosts);
-  }
-  
-  login() {
-    this.navCtrl.push(Login);
   }
 
   logout() {
@@ -72,16 +69,34 @@ export class HomePage {
   }
 
   searchPosts() {
-  	let query = this.createQuery();
-     this.navCtrl.push(ViewPosts, {search: this.search});
+    let loader = this.loadingController.create({
+    content: "Please wait", duration: 6000
+    });
+    loader.present();
+      //if a search is entered 
+      if (this.search != null) {
+        this.navCtrl.setRoot(ViewPosts, {search: this.search});
+        loader.dismiss();
+      } else {
+       loader.dismiss();
+     // prompt for input
+      let toast = this.toastController.create({
+          message: "Enter Client name or Portfolio ID",
+          duration: 6000,
+          position: 'bottom'
+        });
+       toast.present();
+     }
   }
 
+  
+
   createQuery() {
-	let query = {};
-	if(this.search) {
-	 	query['search'] = this.search;
-	}
-	return query;
-	}
+  	let query = {};
+  	if(this.search) {
+  	 	query['search'] = this.search;
+  	}
+  	return query;
+  }
 
 }

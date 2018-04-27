@@ -1,5 +1,6 @@
+
 <ion-header>
-  <ion-navbar hideBackButton="true">
+ <ion-navbar hideBackButton="true">
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
@@ -8,10 +9,6 @@
 </ion-header>
 
 <ion-content scroll="false">
-  <ion-fab top right edge #fab1>
-    <button ion-fab mini color="danger" (click)="Cancel()"><ion-icon ios="ios-close" md="md-close"></ion-icon></button>
- </ion-fab>
-
   <ion-simple-wizard [(step)]="step" [showSteps]="false" (finish)="onFinish()" [finishIcon]="'done-all'" [(stepCondition)]="stepCondition">
     <ion-wizard-step>
         <ion-card-content>
@@ -36,12 +33,12 @@
 
            <ion-item>
              <ion-label stacked >Address</ion-label>
-              <ion-input type="text" name="address" [(ngModel)]="data.address" [disabled]="Readonly"></ion-input>
+              <ion-input type="text" name="address" required [(ngModel)]="data.address" [disabled]="Readonly"></ion-input>
             </ion-item>
 
         <ion-item>
           <ion-label stacked color="primary">City</ion-label>
-          <ion-input  type="text" placeholder="Your city" name="city" [(ngModel)]="data.city" [disabled]="Readonly"></ion-input>
+          <ion-input  type="text" placeholder="Your city" name="city" required [(ngModel)]="data.city" [disabled]="Readonly"></ion-input>
         </ion-item>
 
         <ion-item>
@@ -64,17 +61,17 @@
 
             <ion-item>
                <ion-label stacked >Asset Name</ion-label>
-              <ion-input type="text" name="assetname" [(ngModel)]="data.assetname"></ion-input>
+              <ion-input type="text" name="assetname" required [(ngModel)]="data.assetname"></ion-input>
            </ion-item>
 
             <ion-item>
             <ion-label stacked >Description</ion-label>
-            <ion-textarea name="description" [(ngModel)]="data.description"></ion-textarea>
+            <ion-textarea name="description" required [(ngModel)]="data.description"></ion-textarea>
           </ion-item>
 
               <ion-item>
                 <ion-label stacked color="primary">Bequeathed To</ion-label>
-                <ion-input  type="text" placeholder="Who is this to be left to" name="other" [(ngModel)]="data.bequeathedto"></ion-input>
+                <ion-input  type="text" placeholder="Who is this to be left to" name="other" required [(ngModel)]="data.bequeathedto"></ion-input>
               </ion-item>
           
           </ion-list>

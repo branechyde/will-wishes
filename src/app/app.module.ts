@@ -5,8 +5,6 @@ import { MyApp } from './app.component';
 import { FileTransfer, FileTransferObject } from '@ionic-native/file-transfer';
 import { File } from '@ionic-native/file';
 import { Camera } from '@ionic-native/camera';
-//import { AboutPage } from '../pages/about/about';
-//import { ContactPage } from '../pages/contact/contact';
 import { Welcome } from '../pages/welcome/welcome';
 import { HomePage } from '../pages/home/home';
 import { HttpModule } from '@angular/http';
@@ -48,8 +46,6 @@ import { Config } from './app.config';
     Welcome,
     Login,
     Signup,
-    //AboutPage,
-    //ContactPage,
     HomePage,
     IonSimpleWizard,
     IonSimpleWizardStep,
@@ -82,8 +78,6 @@ import { Config } from './app.config';
     Welcome,
     Login,
     Signup,
-    //AboutPage,
-    //ContactPage,
     HomePage,
     InventoryPage,
     ViewPages,

@@ -5,6 +5,7 @@ import { WizardAnimations } from './ion-simple-wizard-animations';
 import { ViewPosts } from '../viewposts/viewposts';
 import { HomePage} from '../home/home';
 import {  NavController } from 'ionic-angular';
+import { Storage } from '@ionic/storage';
 
 @Component({
   selector: 'ion-simple-wizard',
@@ -20,9 +21,11 @@ export class IonSimpleWizard {
   public steps = 0;//Innitial
   public hideWizard = false;//Default
   @Input() stepCondition = true;//Default
+   disabled:any;
 
-  constructor(public evts: Events,
+  constructor(public evts: Events, private storage: Storage,
              public navCtrl: NavController ) {
+  
   }
 
   ngOnInit() {
@@ -76,7 +79,19 @@ export class IonSimpleWizard {
   next() {
     this.stepChange.emit(this.step + 1);
     this.evts.publish('step:next');
+    //get if fields are empty
+    this.storage.get('error').then((data) => {
+      if (data == 0) {
+       //disable field
+       this.disabled = true;
+      } else {
+        this.disabled = false;
+      } 
+    });
+    
   }
+
+  
 
 
 }

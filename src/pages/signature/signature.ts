@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { NavController, LoadingController, ToastController } from 'ionic-angular';
+import { NavController, LoadingController, ToastController, ViewController } from 'ionic-angular';
 import {SignaturePad} from 'angular2-signaturepad/signature-pad';
 import {SignaturePage2} from '../signature2/signature2';
 import {HomePage} from '../home/home';
@@ -7,6 +7,7 @@ import { ViewPosts } from '../viewposts/viewposts';
 import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
 import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer';
+import { Storage } from '@ionic/storage';
 
 @Component({
   selector: 'page-signature',
@@ -24,9 +25,14 @@ export class SignaturePage {
   public signatureImage : string;
   public random: number;
   public uid: any;
+  public slug: string;
 
-  constructor(public navCtrl: NavController, public loadingCtrl: LoadingController, 
-    private transfer: FileTransfer, public toastCtrl: ToastController) {
+  constructor(public navCtrl: NavController, public loadingCtrl: LoadingController, public viewCtrl: ViewController,
+    private transfer: FileTransfer, public toastCtrl: ToastController, private storage: Storage) {
+
+    this.storage.get('session_id').then((data) => {
+        this.slug = data;
+      });
   }
 
   canvasResize() {
@@ -54,35 +60,26 @@ export class SignaturePage {
    }
 
 
-
-
   drawCancel() {
-    this
-      .navCtrl
-      .push(ViewPosts);
-   
+    this.viewCtrl.dismiss();
+    //this.navCtrl.setRoot(ViewPosts, {search: this.slug });
   }
 
    drawComplete() {
-
-    this.signatureImage = this
-      .signaturePad
-      .toDataURL();
-    this.uploadFile(this.signatureImage);
-    this.navCtrl.push(SignaturePage2, {signatureImage: this.signatureImage});
+    this.signatureImage = this.signaturePad.toDataURL();
+    this.uploadFile(this.signatureImage, this.slug);
+    this.navCtrl.setRoot(SignaturePage2, {signatureImage: this.signatureImage});
   }
 
   drawClear() {
-    this
-      .signaturePad
-      .clear();
+    this.signaturePad.clear();
   }
  
  //upload signature to server
- uploadFile(signature) {
+ uploadFile(signature, slug) {
    let random = this.generateRandomValue(27, 2);
    this.uid = 2; //user id
-  let Filename = '2_'+random + 'sig1.png'
+  let Filename = slug+'_1_'+random + 'sig.png'
   let loader = this.loadingCtrl.create({
     content: "Uploading..."
   });
@@ -96,7 +93,7 @@ export class SignaturePage {
     headers: {}
   }
 
-  fileTransfer.upload(signature, 'http://willwishes.uk/upload.php', options)
+  fileTransfer.upload(signature, 'http://willwishes.uk/addsignature.php', options)
     .then((data) => {
     loader.dismiss();
     this.presentToast("Signature uploaded successfully ");

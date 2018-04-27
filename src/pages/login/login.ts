@@ -35,9 +35,8 @@ export class Login {
       this.authSuccess(result.token);
       console.log(result.token);
       this.storage.set('wordpress.user', result);
-      this.navController.push(HomePage, {
-        user: result
-      });
+      this.navController.setRoot(HomePage, { user: result });
+
     }, (error) => {
       loader.dismiss();
       let errorMessage = error.json();
